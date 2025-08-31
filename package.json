@@ -1,0 +1,31 @@
+{
+  "name": "telegram-bot-template",
+  "private": true,
+  "version": "0.0.0",
+  "main": "./src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "npx tsx ./src/index.ts prodMode",
+    "dev": "npx nodemon devMode"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.34.0",
+    "@types/node-telegram-bot-api": "^0.64.10",
+    "@typescript-eslint/eslint-plugin": "^8.41.0",
+    "@typescript-eslint/parser": "^8.41.0",
+    "eslint": "^9.34.0",
+    "eslint-plugin-path": "^2.0.3",
+    "eslint-plugin-sort-imports-es6-autofix": "^0.6.0",
+    "eslint-plugin-unused-imports": "^4.2.0",
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1",
+    "tsx": "^4.20.5",
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "node-telegram-bot-api": "^0.63.0",
+    "prepend-file": "^2.0.1"
+  }
+}
