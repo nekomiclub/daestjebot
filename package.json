@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "dotenv": "^16.3.1",
+    "mongoose": "^8.18.0",
     "node-telegram-bot-api": "^0.63.0",
     "prepend-file": "^2.0.1"
   }

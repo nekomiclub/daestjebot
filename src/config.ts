@@ -11,7 +11,10 @@ dotenvCfg();
 
 
 const env = {
-  BOT_TOKEN: String(process.env['BOT_TOKEN'])
+  BOT_TOKEN: String(process.env['BOT_TOKEN']),
+  ATLAS_USR: String(process.env['ATLAS_USR']),
+  ATLAS_PWD: String(process.env['ATLAS_PWD']),
+  ISPROD: process.env['ISPROD'] == 'true',
 };
 
 
@@ -26,11 +29,19 @@ const logsDir = `${path.resolve()}/logs`;
 
 
 export const bot = new TelegramApi(env.BOT_TOKEN, {
-  polling: true
+  polling: {
+    autoStart: true,
+    params: {
+      offset: -1 // ignore past updates
+    }
+  }
 });
 
 export const config = {
   logsDir,
+  mongodbUrl: `mongodb+srv://${env.ATLAS_USR}:${env.ATLAS_PWD}@default.saj4se1.mongodb.net/${env.ISPROD ? 'production' : 'development'}?retryWrites=true&w=majority&appName=default`,
   startedAt: `${getUTC().fulldate} ${getUTC().timeAccurate}`,
-  startedMode: `${ProductionMode ? 'Production' : DevelopmentMode ? 'Development' : 'UNKNOWN'}`
+  startedMode: `${ProductionMode ? 'Production' : DevelopmentMode ? 'Development' : 'UNKNOWN'}`,
+
+  env,
 };
