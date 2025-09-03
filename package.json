@@ -1,12 +1,14 @@
 {
-  "name": "telegram-bot-template",
+  "name": "daestjebot",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "main": "./src/index.js",
   "type": "module",
   "scripts": {
     "start": "npx tsx ./src/index.ts prodMode",
-    "dev": "npx nodemon devMode"
+    "dev": "npx nodemon devMode",
+    "husky": "npx tsx ./src/index.ts",
+    "build": "npx eslint . --fix && npx tsc"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
@@ -18,6 +20,7 @@
     "eslint-plugin-path": "^2.0.3",
     "eslint-plugin-sort-imports-es6-autofix": "^0.6.0",
     "eslint-plugin-unused-imports": "^4.2.0",
+    "husky": "^9.1.7",
     "nodemon": "^2.0.20",
     "ts-node": "^10.9.1",
     "tsx": "^4.20.5",
@@ -25,7 +28,7 @@
   },
   "dependencies": {
     "dotenv": "^16.3.1",
-    "mongoose": "^8.18.0",
+    "mongoose": "^8.0.1",
     "node-telegram-bot-api": "^0.63.0",
     "prepend-file": "^2.0.1"
   }
