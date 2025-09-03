@@ -1,13 +1,13 @@
 import { Message } from 'node-telegram-bot-api';
-import { Logger } from './services/LoggerService';
-import { USER_RIGHTS } from './types/IUser';
-import { config } from './config';
-import getUser from './handlers/get-user';
-import grantPermCommand from './commands/grant-perm';
-import { messageDTO } from './handlers/DTOs';
-import revokePermCommand from './commands/revoke-perm';
-import pingEveryoneCommand from './commands/ping-everyone';
-import { CommandsList, ICommandProps } from './types/types';
+import { Logger } from '../services/LoggerService';
+import { USER_RIGHTS } from '../types/IUser';
+import { config } from '../config';
+import getUser from '../handlers/get-user';
+import grantPermCommand from '../commands/grant-perm';
+import { messageDTO } from '../handlers/DTOs';
+import revokePermCommand from '../commands/revoke-perm';
+import pingEveryoneCommand from '../commands/ping-everyone';
+import { CommandsList, ICommandProps } from '../types/types';
 
 
 
