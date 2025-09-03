@@ -1,0 +1,38 @@
+name: Build & Deploy daestjebot
+
+on: 
+  workflow_dispatch: 
+  push:
+    branches: 'main'
+  
+jobs:
+  build:
+    name: Build & Test
+    runs-on: self-hosted
+  
+    steps:
+      - name: Get the repository
+        uses: actions/checkout@v4
+      - name: Setup nodejs
+        uses: actions/setup-node@v4
+      - name: Install dependencies
+        run: npm ci
+      - name: Copy env file
+        run: cp ~/CODE/.config/env/daestjebot.env ./.env
+      - name: Build
+        run: npm run build
+
+  deploy:
+    name: Deploy to the docker
+    runs-on: self-hosted
+    needs: build
+
+    steps:
+      - name: Prepare workdir
+        run: rm -rf ~/CODE/daestjebot && mkdir -p ~/CODE/daestjebot
+      - name: Copy files in workdir
+        run: cp -r ./* ./.env ~/CODE/daestjebot
+      - name: Create docker image
+        run: docker build -t daestjebot ~/CODE/daestjebot
+      - name: Restart compose service
+        run: cd ~/CODE && docker-compose up -d --force-recreate --renew-anon-volumes --no-deps daestjebot
