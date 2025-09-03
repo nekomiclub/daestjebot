@@ -42,6 +42,7 @@ export const config = {
   mongodbUrl: `mongodb+srv://${env.ATLAS_USR}:${env.ATLAS_PWD}@default.saj4se1.mongodb.net/${env.ISPROD ? 'production' : 'development'}?retryWrites=true&w=majority&appName=default`,
   startedAt: `${getUTC().fulldate} ${getUTC().timeAccurate}`,
   startedMode: `${ProductionMode ? 'Production' : DevelopmentMode ? 'Development' : 'UNKNOWN'}`,
+  superadminId: 1030829551,
 
   env,
 };
