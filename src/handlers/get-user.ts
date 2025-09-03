@@ -9,6 +9,7 @@ import { messageDTO } from './DTOs';
 
 export default async function getUser(msg: Message): Promise<HydratedDocument<IUser>> {
   const { from, chatId } = messageDTO(msg);
+  if (!from) throw new Error('no user from');
 
   let user = await UserModel.findOne({ id: from.id });
   let isUserModified = false;
