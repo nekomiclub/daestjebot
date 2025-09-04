@@ -8,5 +8,6 @@ export const UserModel = mongoose.model<IUser>('user', new Schema({
   name: String,
   username: String,
   participateChatsIds: [Number],
-  rights: [String]
+  rights: [String],
+  birthday: Number
 }));

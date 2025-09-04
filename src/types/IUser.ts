@@ -7,9 +7,13 @@ export enum USER_RIGHTS {
 export interface IUser {
   id: number
   name: string
-  username: string | undefined
   participateChatsIds: number[]
   rights: USER_RIGHTS[]
+
+  username?: string
+
+  /** utc-0 timestamp */
+  birthday?: number
 }
 
 
