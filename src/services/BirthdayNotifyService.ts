@@ -39,7 +39,7 @@ class BirthdayNotifyServ {
     setInterval(() => {
       const now = getUTC();
       if (now.hrs === 21) this.poll();
-    }, 1000);
+    }, 60000);
   }
 
   // Poll users birthdays
