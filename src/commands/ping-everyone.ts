@@ -1,5 +1,6 @@
 import { bot } from '../config';
 import { messageDTO } from '../handlers/DTOs';
+import { mentionUser } from '../handlers/service';
 import { UserModel } from '../models/UserModel';
 import { ICommandProps } from '../types/types';
 
@@ -16,7 +17,7 @@ export default async function pingEveryoneCommand({ msg }: ICommandProps) {
     }
   });
 
-  await bot.sendMessage(chatId, `${label} ${users.map(el => `[${el.username ? `@${el.username}` : el.name}](tg://user?id=${el.id})`).join(' ')}`, {
+  await bot.sendMessage(chatId, `${label} ${users.map(el => mentionUser(el)).join(' ')}`, {
     protect_content: true,
     parse_mode: 'Markdown'
   });

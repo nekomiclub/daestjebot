@@ -1,3 +1,5 @@
+import IUser from '../types/IUser';
+
 /** Get random between min and max */
 export function randomNumberBetween(min: number, max: number): number {
   return Math.floor(min + Math.random() * (max + 1 - min));
@@ -55,4 +57,8 @@ export function getUTC(timestamp?: number | string | null): {
     time: `${hrs}:${mins}`,
     timeAccurate: `${hrs}:${mins}:${secs}.${ms}`,
   };
+}
+
+export function mentionUser(user: IUser) {
+  return `[${user.username ? `@${user.username}` : user.name}](tg://user?id=${user.id})`;
 }
