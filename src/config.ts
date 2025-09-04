@@ -43,6 +43,7 @@ export const config = {
   startedAt: `${getUTC().fulldate} ${getUTC().timeAccurate}`,
   startedMode: `${ProductionMode ? 'Production' : DevelopmentMode ? 'Development' : 'UNKNOWN'}`,
   superadminId: 1030829551,
+  curatorsIds: [697514948, 1386161279, 531261619],
 
   env,
 };
