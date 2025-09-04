@@ -21,7 +21,7 @@ export default async function PMController(msg: Message) {
 
 
 
-    if (text.match(CommandsList.CHANGE_BIRTHDAY) && user.id === config.superadminId) changeBirthdayCommand(cp);
+    if (text.match(CommandsList.CHANGE_BIRTHDAY) && user.id === config.superadminId) await changeBirthdayCommand(cp);
   } catch (e) {
     Logger.error(`[PM]: An error occured at private chat`, e);
   }
