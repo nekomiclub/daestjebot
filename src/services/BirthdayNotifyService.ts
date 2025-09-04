@@ -34,12 +34,19 @@ class BirthdayNotifyServ {
     setInterval(async () => {
       this.poll();
     }, 3600000);
+
+    // Ping at 12 pm
+    setInterval(() => {
+      const now = getUTC();
+      if (now.hrs === 21) this.poll();
+    }, 60000);
   }
 
   // Poll users birthdays
   async poll() {
     try {
       const now = getUTC();
+
       const users = await UserModel.find({ birthday: { $ne: undefined } });
 
       for (const key in users) {
