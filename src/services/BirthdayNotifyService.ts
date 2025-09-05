@@ -37,8 +37,8 @@ class BirthdayNotifyServ {
 
     // Ping at 12 pm
     setInterval(() => {
-      const now = getUTC();
-      if (now.hrs === 21) this.poll();
+      const now = new Date();
+      if (now.getHours() === 0) this.poll();
     }, 60000);
   }
 
@@ -85,7 +85,7 @@ class BirthdayNotifyServ {
 
         try {
           await bot.sendPhoto(chatId, `https://cataas.com/cat?ts=${getUTC().timestamp}`, {
-            caption: `З днем народження ${mentionUser(user)}!\n${BirthdayMessages[randomNumberBetween(0, BirthdayMessages.length - 1)]}\n\nДавайте вип'єм за ту дату, Коли мама дала тату.`,
+            caption: `З днем народження ${mentionUser(user)}! 🥳🎂🥂\n${BirthdayMessages[randomNumberBetween(0, BirthdayMessages.length - 1)]}\n\nДавайте вип'єм за ту дату, Коли мама дала тату. 🍻`,
             parse_mode: 'Markdown'
           });
         } catch (e) {
