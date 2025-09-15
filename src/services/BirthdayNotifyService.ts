@@ -35,12 +35,6 @@ class BirthdayNotifyServ {
     setInterval(async () => {
       this.poll();
     }, 3600000);
-
-    // Ping at 12 pm
-    setInterval(() => {
-      const now = new Date();
-      if (now.getHours() === 0) this.poll();
-    }, 60000);
   }
 
   // Poll users birthdays
@@ -83,10 +77,12 @@ class BirthdayNotifyServ {
   async notifyChat(user: HydratedDocument<IUser>, chatId: number) {
     try {
       if (user.participateChatsIds.includes(chatId)) {
-        await bot.sendPhoto(chatId, `https://cataas.com/cat?ts=${getUTC().timestamp}`, {
+        const celebrateMsg = await bot.sendPhoto(chatId, `https://cataas.com/cat?ts=${getUTC().timestamp}`, {
           caption: `З днем народження ${mentionUser(user)}! 🥳🎂🥂\n${BirthdayMessages[randomNumberBetween(0, BirthdayMessages.length - 1)]}\n\nДавайте вип'єм за ту дату, Коли мама дала тату. 🍻`,
           parse_mode: 'Markdown'
         });
+
+        await bot.pinChatMessage(chatId, celebrateMsg.message_id);
 
         Logger.info(`[BirthdayNotifyServ]: Celebrating ${user.username ?? user.name} birthday!`);
       } else {

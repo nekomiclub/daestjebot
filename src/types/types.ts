@@ -5,6 +5,7 @@ import IUser from './IUser';
 
 
 export const CommandsList = {
+  PING: /^\/ping/gi,
   GRANT_PERM: /^\/grant\s/gi,
   REVOKE_PERM: /^\/revoke\s/gi,
   PING_EVERYONE: /^@all|^@everyone/gi,
@@ -12,6 +13,7 @@ export const CommandsList = {
   PING_CURATORS: /^@cr|^@куратори/gi,
   START: /^\/start/gi,
   CHANGE_BIRTHDAY: /^\/bd\s/gi,
+  RECONNECT_MONGODB: /^\/rc/gi,
 };
 
 
