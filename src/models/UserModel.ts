@@ -7,7 +7,7 @@ export const UserModel = mongoose.model<IUser>('user', new Schema({
   id: Number,
   name: String,
   username: String,
-  participateChatsIds: [Number],
-  rights: [String],
+  participateChatsIds: Array,
+  rights: Array,
   birthday: Number
 }));

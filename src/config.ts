@@ -15,6 +15,8 @@ const env = {
   DB_NAME: String(process.env['DB_NAME']),
   DB_USR: String(process.env['DB_USR']),
   DB_PWD: String(process.env['DB_PWD']),
+
+  ISDOCKER: process.env['ISDOCKER'] == 'true',
 };
 
 
@@ -24,7 +26,7 @@ export const ProductionMode = process.argv.includes('prodMode');
 export const TestMode = process.argv.includes('testMode');
 
 export const adminId = 1030829551;
-const logsDir = `${path.resolve()}/logs`;
+const logsDir = env.ISDOCKER ? '/logs' : `${path.resolve()}/logs`;
 
 
 
@@ -44,6 +46,7 @@ export const config = {
   startedMode: `${ProductionMode ? 'Production' : DevelopmentMode ? 'Development' : 'UNKNOWN'}`,
   superadminId: 1030829551,
   curatorsIds: [697514948, 1386161279, 531261619],
+  mainChatId: ProductionMode ? -1003067202557 : -1002939508402,
 
   env,
 };

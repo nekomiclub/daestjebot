@@ -12,7 +12,7 @@ export default async function changeBirthdayCommand({ msg }: ICommandProps) {
 
   const params = text.replace(CommandsList.CHANGE_BIRTHDAY, '').split(' ');
 
-  const username = params[0].replace('@', '');
+  const query = params[0].replace('@', '');
   const dateParts = params[1].split('.');
   const date = new Date();
 
@@ -21,8 +21,8 @@ export default async function changeBirthdayCommand({ msg }: ICommandProps) {
   date.setUTCDate(Number(dateParts[0]));
   date.setUTCHours(0, 0, 0, 0);
 
-  const user = await UserModel.findOne({ username });
-  if (!user) return bot.sendMessage(chatId, `no user found with this username`);
+  const user = await UserModel.findOne({ $or: [{ username: query }, { id: query }] });
+  if (!user) return bot.sendMessage(chatId, `no user found with this username / id`);
   if (isNaN(+date)) return bot.sendMessage(chatId, `invalid date (should be dd.mm.yyyy)`);
 
   Logger.debug(`User (${user.id}) birthday changed (${new Date(user.birthday ?? 0).toUTCString()} > ${new Date(getUTC(+date).timestamp).toUTCString()})`);
@@ -30,5 +30,5 @@ export default async function changeBirthdayCommand({ msg }: ICommandProps) {
 
   await user.save();
 
-  await bot.sendMessage(chatId, `Birthday of @${username} changed to ${new Date(date).toUTCString()}`);
+  await bot.sendMessage(chatId, `Birthday of @${user.username ?? user.name} changed to ${new Date(date).toUTCString()}`);
 }

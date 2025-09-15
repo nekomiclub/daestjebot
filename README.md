@@ -15,3 +15,4 @@ Create local ```.env``` file using example ```.env.exmaple```
 
 ## Perms
 - can_ping - can ping everyone
+- bd_nt3 - three days notify about someone birthday
