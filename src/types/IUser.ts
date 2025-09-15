@@ -1,5 +1,7 @@
 export enum USER_RIGHTS {
   CAN_PING = 'can_ping',
+
+  BIRTHDAY_NOTIFY_3DAYS = 'bd_nt3'
 }
 
 

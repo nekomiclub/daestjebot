@@ -5,6 +5,7 @@ import { messageDTO } from '../handlers/DTOs';
 import { CommandsList, ICommandProps } from '../types/types';
 import { config } from '../config';
 import changeBirthdayCommand from '../commands/change-birthday';
+import reconnectMongodb from '../commands/reconnect-mongodb';
 
 
 
@@ -22,6 +23,7 @@ export default async function PMController(msg: Message) {
 
 
     if (text.match(CommandsList.CHANGE_BIRTHDAY) && user.id === config.superadminId) await changeBirthdayCommand(cp);
+    if (text.match(CommandsList.RECONNECT_MONGODB) && user.id === config.superadminId) await reconnectMongodb();
   } catch (e) {
     Logger.error(`[PM]: An error occured at private chat`, e);
   }

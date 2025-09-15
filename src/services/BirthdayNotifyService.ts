@@ -1,9 +1,9 @@
 import { HydratedDocument } from 'mongoose';
 import { getUTC, mentionUser, randomNumberBetween } from '../handlers/service';
 import { UserModel } from '../models/UserModel';
-import IUser from '../types/IUser';
+import IUser, { USER_RIGHTS } from '../types/IUser';
 import { Logger } from './LoggerService';
-import { bot } from '../config';
+import { bot, config } from '../config';
 
 
 
@@ -22,7 +22,8 @@ const BirthdayMessages = [
 
 
 class BirthdayNotifyServ {
-  usersNotified: string[] = [];
+  usersNotified: number[] = [];
+  usersNotifiedThreeDays: number[] = [];
 
 
 
@@ -34,12 +35,6 @@ class BirthdayNotifyServ {
     setInterval(async () => {
       this.poll();
     }, 3600000);
-
-    // Ping at 12 pm
-    setInterval(() => {
-      const now = getUTC();
-      if (now.hrs === 21) this.poll();
-    }, 60000);
   }
 
   // Poll users birthdays
@@ -54,13 +49,21 @@ class BirthdayNotifyServ {
           const user = users[key];
 
           const birthdayDate = getUTC(user.birthday);
+          const birthdayDateNow = new Date(user.birthday!).setFullYear(getUTC().year);
+          const threeDaysBirthdayOffset = new Date(user.birthday! - (60000 * 60 * 24 * 3)).setFullYear(getUTC().year);
 
-          // notify
+          // notify main chat
           if (birthdayDate.month === now.month && birthdayDate.date === now.date && !this.usersNotified.includes(user.id)) {
             this.usersNotified.push(user.id);
 
-            this.notifyChats(user);
+            this.notifyChat(user, config.mainChatId);
           };
+
+          if (now.timestamp > threeDaysBirthdayOffset && now.timestamp < birthdayDateNow && !this.usersNotifiedThreeDays.includes(user.id)) {
+            this.usersNotifiedThreeDays.push(user.id);
+
+            this.notifyThreeDays(user);
+          }
         } catch (e) {
           Logger.fail(`[BirthdayNotifyServ]: Poll map users error`, e);
         }
@@ -70,52 +73,38 @@ class BirthdayNotifyServ {
     }
   }
 
-  // Notify users chats
-  async notifyChats(user: HydratedDocument<IUser>) {
+  /** Notify users chat */
+  async notifyChat(user: HydratedDocument<IUser>, chatId: number) {
     try {
-      let participateModified = false;
+      if (user.participateChatsIds.includes(chatId)) {
+        const celebrateMsg = await bot.sendPhoto(chatId, `https://cataas.com/cat?ts=${getUTC().timestamp}`, {
+          caption: `З днем народження ${mentionUser(user)}! 🥳🎂🥂\n${BirthdayMessages[randomNumberBetween(0, BirthdayMessages.length - 1)]}\n\nДавайте вип'єм за ту дату, Коли мама дала тату. 🍻`,
+          parse_mode: 'Markdown'
+        });
 
+        await bot.pinChatMessage(chatId, celebrateMsg.message_id);
 
-
-      for (const key in user.participateChatsIds) {
-        const chatId = user.participateChatsIds[key];
-
-        // Drop private chat
-        if (chatId > 0) continue;
-
-        try {
-          await bot.sendPhoto(chatId, `https://cataas.com/cat?ts=${getUTC().timestamp}`, {
-            caption: `З днем народження ${mentionUser(user)}!\n${BirthdayMessages[randomNumberBetween(0, BirthdayMessages.length - 1)]}\n\nДавайте вип'єм за ту дату, Коли мама дала тату.`,
-            parse_mode: 'Markdown'
-          });
-        } catch (e) {
-          if ('response' in (e as any)) {
-            const res = (e as any).response.body as { ok: boolean, error_code: number, description: string };
-
-            // Drop invalid chat
-            if (res.description === 'Bad Request: chat not found' || res.description === 'Bad Request: group chat was upgraded to a supergroup chat') {
-              user.participateChatsIds = user.participateChatsIds.filter(el => el !== chatId);
-              participateModified = true;
-              Logger.debug(`[BirthdayNotifyServ]: Chat (${chatId}) dropped due to not found or upgrade to supergroup`);
-
-              return;
-            }
-          }
-
-          Logger.fail(`[BirthdayNotifyServ]: Chat notify error`, e);
-        }
+        Logger.info(`[BirthdayNotifyServ]: Celebrating ${user.username ?? user.name} birthday!`);
+      } else {
+        Logger.warn(`[BirthdayNotifyServ]: User (${user.id}) is not participate in required chat (#${chatId})`);
       }
-
-      // Save modified participate chats
-      if (participateModified) {
-        Logger.debug(`[BirthdayNotifyServ]: Participate chats modified (invalid dropped)`);
-        user.markModified('participateChatsIds');
-        await user.save();
-      }
-
-      Logger.info(`[BirthdayNotifyServ]: Celebrating ${user.username ?? user.name} birthday!`);
     } catch (e) {
       Logger.fail(`[BirthdayNotifyServ]: Chats notify error`, e);
+    }
+  }
+
+  /** Notify chosen users about soon someone birthday */
+  async notifyThreeDays(user: HydratedDocument<IUser>) {
+    try {
+      const notifyPoll = await UserModel.find({ rights: { $in: [USER_RIGHTS.BIRTHDAY_NOTIFY_3DAYS] } });
+
+      for (const key in notifyPoll) {
+        const notify = notifyPoll[key];
+
+        await bot.sendMessage(notify.id, `Сап, the chosen one 👋\n\n🎂 Нагадую, у ${mentionUser(user)} скоро буде день народження (${getUTC(user.birthday).fulldate}), бажаю удачі!`, { parse_mode: 'Markdown' });
+      }
+    } catch (e) {
+      Logger.fail(`[BirthdayNotifyServ]: Three days notify error occured`, e);
     }
   }
 }
