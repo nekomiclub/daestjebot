@@ -1,19 +1,14 @@
-import mongoose from 'mongoose';
 import { bot, config } from './config.js';
 import { Logger } from './services/LoggerService.js';
 import GroupController from './controllers/group-controller.js';
 import PMController from './controllers/pm-controller.js';
 import BirthdayNotifyService from './services/BirthdayNotifyService.js';
+import MongoDBService from './services/MongoDBService.js';
 
 
 
 //* Establish mongodb connection
-mongoose.set('strictQuery', false);
-mongoose.connect(config.mongodbUrl, {
-  retryWrites: true,
-}).catch(e => {
-  Logger.fail('[System]: MongoDB connection failed', e);
-});
+MongoDBService.connect();
 
 
 
