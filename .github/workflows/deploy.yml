@@ -4,10 +4,6 @@ on:
   workflow_dispatch: 
   push:
     branches: 'main'
-
-env:
-  APP_NAME: daestjebot
-  APP_BASE_PATH: ~/CODE # ./{path}, app name will be added
   
 jobs:
   build:
@@ -33,10 +29,10 @@ jobs:
 
     steps:
       - name: Prepare workdir
-        run: rm -rf $APP_BASE_PATH/$APP_NAME && mkdir -p $APP_BASE_PATH/$APP_NAME
+        run: rm -rf ~/CODE/daestjebot && mkdir -p ~/CODE/daestjebot
       - name: Copy files in workdir
-        run: cp -r ./* ./.env $APP_BASE_PATH/$APP_NAME
+        run: cp -r ./* ./.env ~/CODE/daestjebot
       - name: Create docker image
-        run: docker build -t $APP_NAME $APP_BASE_PATH/$APP_NAME
+        run: docker build -t daestjebot ~/CODE/daestjebot
       - name: Restart compose service
-        run: cd $APP_BASE_PATH && docker-compose up -d --force-recreate --renew-anon-volumes --no-deps $APP_NAME
+        run: cd ~/CODE && docker-compose up -d --force-recreate --renew-anon-volumes --no-deps daestjebot
