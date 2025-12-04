@@ -1,13 +1,13 @@
 {
   "name": "daestjebot",
   "private": true,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "./src/index.js",
   "type": "module",
   "scripts": {
     "start": "npx tsx ./src/index.ts prodMode",
     "dev": "npx nodemon devMode",
-    "husky": "npx tsx ./src/index.ts",
+    "husky": "npm run build && git add .",
     "build": "npx eslint . --fix && npx tsc"
   },
   "devDependencies": {
@@ -22,7 +22,6 @@
     "eslint-plugin-unused-imports": "^4.2.0",
     "husky": "^9.1.7",
     "nodemon": "^2.0.20",
-    "ts-node": "^10.9.1",
     "tsx": "^4.20.5",
     "typescript": "^4.9.5"
   },

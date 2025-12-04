@@ -1,14 +1,15 @@
-FROM node:23.11.1-slim
+FROM node:25-alpine3.22
 
 WORKDIR /usr/src/app
+ENV ISDOCKER=true
 
 # Install dependencies
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 
+# Build project
 COPY . .
-
-ENV ISDOCKER=true
+RUN npm run build
 
 # Run
 CMD [ "npm", "run", "start" ]

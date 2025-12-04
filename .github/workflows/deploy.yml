@@ -1,9 +1,13 @@
-name: Build & Deploy daestjebot
+name: Build & Deploy service
 
 on: 
   workflow_dispatch: 
   push:
     branches: 'main'
+
+env:
+  APP_NAME: daestjebot
+  APP_BASE_PATH: ~/CODE # ./{path}, app name will be added
   
 jobs:
   build:
@@ -18,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Copy env file
-        run: cp ~/CODE/.config/env/daestjebot.env ./.env
+        run: cp $APP_BASE_PATH/.config/env/$APP_NAME.env ./.env
       - name: Build
         run: npm run build
 
@@ -29,10 +33,10 @@ jobs:
 
     steps:
       - name: Prepare workdir
-        run: rm -rf ~/CODE/daestjebot && mkdir -p ~/CODE/daestjebot
+        run: rm -rf $APP_BASE_PATH/$APP_NAME && mkdir -p $APP_BASE_PATH/$APP_NAME
       - name: Copy files in workdir
-        run: cp -r ./* ./.env ~/CODE/daestjebot
+        run: cp -r ./* ./.env $APP_BASE_PATH/$APP_NAME
       - name: Create docker image
-        run: docker build -t daestjebot ~/CODE/daestjebot
+        run: docker build -t $APP_NAME $APP_BASE_PATH/$APP_NAME
       - name: Restart compose service
-        run: cd ~/CODE && docker-compose up -d --force-recreate --renew-anon-volumes --no-deps daestjebot
+        run: cd $APP_BASE_PATH && docker-compose up -d --force-recreate --renew-anon-volumes --no-deps $APP_NAME
