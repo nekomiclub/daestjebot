@@ -1,1 +1,1 @@
-npm run husky
+npm run build && git add .

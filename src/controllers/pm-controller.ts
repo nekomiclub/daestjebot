@@ -1,11 +1,10 @@
 import { Message } from 'node-telegram-bot-api';
-import { Logger } from '../services/LoggerService';
+import { Logger } from '../services/LoggerService.old';
 import getUser from '../handlers/get-user';
 import { messageDTO } from '../handlers/DTOs';
 import { CommandsList, ICommandProps } from '../types/types';
-import { config } from '../config';
+import { conf } from '../conf';
 import changeBirthdayCommand from '../commands/change-birthday';
-import reconnectMongodb from '../commands/reconnect-mongodb';
 
 
 
@@ -22,8 +21,7 @@ export default async function PMController(msg: Message) {
 
 
 
-    if (text.match(CommandsList.CHANGE_BIRTHDAY) && user.id === config.superadminId) await changeBirthdayCommand(cp);
-    if (text.match(CommandsList.RECONNECT_MONGODB) && user.id === config.superadminId) await reconnectMongodb();
+    if (text.match(CommandsList.CHANGE_BIRTHDAY) && user.id === conf.superadminId) await changeBirthdayCommand(cp);
   } catch (e) {
     Logger.error(`[PM]: An error occured at private chat`, e);
   }

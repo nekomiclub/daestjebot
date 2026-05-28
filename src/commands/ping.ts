@@ -1,4 +1,4 @@
-import { bot } from '../config';
+import { bot } from '../conf';
 import { messageDTO } from '../handlers/DTOs';
 import { ICommandProps } from '../types/types';
 

@@ -1,4 +1,4 @@
-import { bot, config } from '../config';
+import { bot, conf } from '../conf';
 import { messageDTO } from '../handlers/DTOs';
 import { mentionUser } from '../handlers/service';
 import { UserModel } from '../models/UserModel';
@@ -34,7 +34,7 @@ export async function pingStudents({ msg }: ICommandProps) {
     participateChatsIds: {
       $in: [chatId]
     }
-  })).filter(el => !config.curatorsIds.includes(el.id));
+  })).filter(el => !conf.curatorsIds.includes(el.id));
 
   await bot.sendMessage(chatId, `${label} ${users.map(el => mentionUser(el)).join(' ')}`, {
     protect_content: true,
@@ -53,7 +53,7 @@ export async function pingCurators({ msg }: ICommandProps) {
     participateChatsIds: {
       $in: [chatId]
     }
-  })).filter(el => config.curatorsIds.includes(el.id));
+  })).filter(el => conf.curatorsIds.includes(el.id));
 
   await bot.sendMessage(chatId, `${label} ${users.map(el => mentionUser(el)).join(' ')}`, {
     protect_content: true,

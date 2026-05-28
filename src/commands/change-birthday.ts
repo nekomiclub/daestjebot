@@ -1,8 +1,8 @@
-import { bot } from '../config';
+import { bot } from '../conf';
 import { messageDTO } from '../handlers/DTOs';
 import { getUTC } from '../handlers/service';
 import { UserModel } from '../models/UserModel';
-import { Logger } from '../services/LoggerService';
+import { Logger } from '../services/LoggerService.old';
 import { CommandsList, ICommandProps } from '../types/types';
 
 

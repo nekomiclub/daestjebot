@@ -13,7 +13,6 @@ export const CommandsList = {
   PING_CURATORS: /^@cr|^@куратори/gi,
   START: /^\/start/gi,
   CHANGE_BIRTHDAY: /^\/bd\s/gi,
-  RECONNECT_MONGODB: /^\/rc/gi,
 };
 
 

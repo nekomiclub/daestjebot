@@ -1,7 +1,7 @@
 import { Message } from 'node-telegram-bot-api';
-import { Logger } from '../services/LoggerService';
+import { Logger } from '../services/LoggerService.old';
 import { USER_RIGHTS } from '../types/IUser';
-import { config } from '../config';
+import { conf } from '../conf';
 import getUser from '../handlers/get-user';
 import grantPermCommand from '../commands/grant-perm';
 import { messageDTO } from '../handlers/DTOs';
@@ -28,8 +28,8 @@ export default async function GroupController(msg: Message) {
 
 
 
-    if (text.match(CommandsList.GRANT_PERM) && user.id === config.superadminId) await grantPermCommand(cp);
-    if (text.match(CommandsList.REVOKE_PERM) && user.id === config.superadminId) await revokePermCommand(cp);
+    if (text.match(CommandsList.GRANT_PERM) && user.id === conf.superadminId) await grantPermCommand(cp);
+    if (text.match(CommandsList.REVOKE_PERM) && user.id === conf.superadminId) await revokePermCommand(cp);
     if (text.match(CommandsList.PING_EVERYONE) && user.rights.includes(USER_RIGHTS.CAN_PING)) await pingEveryoneCommand(cp);
     if (text.match(CommandsList.PING_STUDENTS) && user.rights.includes(USER_RIGHTS.CAN_PING)) await pingStudents(cp);
     if (text.match(CommandsList.PING_CURATORS) && user.rights.includes(USER_RIGHTS.CAN_PING)) await pingCurators(cp);

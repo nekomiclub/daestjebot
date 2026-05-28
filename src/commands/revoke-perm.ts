@@ -1,7 +1,7 @@
-import { bot } from '../config';
+import { bot } from '../conf';
 import { messageDTO } from '../handlers/DTOs';
 import { UserModel } from '../models/UserModel';
-import { Logger } from '../services/LoggerService';
+import { Logger } from '../services/LoggerService.old';
 import { USER_RIGHTS } from '../types/IUser';
 import { ICommandProps } from '../types/types';
 

@@ -39,7 +39,7 @@ export const bot = new TelegramApi(env.BOT_TOKEN, {
   }
 });
 
-export const config = {
+export const conf = {
   logsDir,
   mongodbUrl: `mongodb+srv://${env.DB_USR}:${env.DB_PWD}@default.saj4se1.mongodb.net/${env.DB_NAME}?retryWrites=true&w=majority&appName=default`,
   startedAt: `${getUTC().fulldate} ${getUTC().timeAccurate}`,
@@ -48,5 +48,13 @@ export const config = {
   curatorsIds: [697514948, 1386161279, 531261619],
   mainChatId: ProductionMode ? -1003067202557 : -1002939508402,
 
+  variables: {
+    volumes: {
+      logs: env.ISDOCKER ? '/logs' : './logs'
+    },
+  },
+
   env,
 };
+
+export default conf;

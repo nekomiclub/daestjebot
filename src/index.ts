@@ -1,27 +1,27 @@
-import { bot, config } from './config.js';
-import { Logger } from './services/LoggerService.js';
-import GroupController from './controllers/group-controller.js';
-import PMController from './controllers/pm-controller.js';
-import BirthdayNotifyService from './services/BirthdayNotifyService.js';
-import MongoDBService from './services/MongoDBService.js';
+import mongoose from 'mongoose';
+import { bot, conf } from './conf';
+import { Logger } from './services/LoggerService.old';
+import BirthdayNotifyService from './services/BirthdayNotifyService';
+import PMController from './controllers/pm-controller';
+import GroupController from './controllers/group-controller';
 
 
 
-//* Establish mongodb connection
-MongoDBService.connect();
-
-
-
-(async function () {
+async function runtime() {
   try {
+    // === Establish database connection
+    await ConnectMongoDB();
+
+
+
     console.log(`
-    ----------------------------
-    BOT STARTED UP
-  
-    Date: ${config.startedAt} UTC
-    Mode: ${config.startedMode}
-    ----------------------------
-      `);
+      ----------------------------
+      BOT STARTED UP
+    
+      Date: ${conf.startedAt} UTC
+      Mode: ${conf.startedMode}
+      ----------------------------
+        `);
 
     bot.on('message', msg => {
       Logger.trace(`[${msg.from?.username ?? msg.from?.id}/${msg.chat.id}]: ${msg.text}`);
@@ -36,6 +36,23 @@ MongoDBService.connect();
 
     BirthdayNotifyService.startCRON();
   } catch (e) {
-    Logger.fail(`[Startup]: An error ocured while startup`, e);
+    Logger.error(`[System/Init]: FATAL ERROR OCCURED. MESSAGE: `, e);
+
+    // Delay app crash to ensure that crash log has been collected
+    setTimeout(() => {
+      throw e;
+    }, 1000);
   }
-})();
+}
+
+runtime();
+
+
+
+/** Connect to the mongodb */
+async function ConnectMongoDB() {
+  mongoose.set('strictQuery', false);
+  await mongoose.connect(conf.mongodbUrl, {
+    retryWrites: true,
+  });
+}

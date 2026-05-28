@@ -2,8 +2,8 @@ import { HydratedDocument } from 'mongoose';
 import { getUTC, mentionUser, randomNumberBetween } from '../handlers/service';
 import { UserModel } from '../models/UserModel';
 import IUser, { USER_RIGHTS } from '../types/IUser';
-import { Logger } from './LoggerService';
-import { bot, config } from '../config';
+import { Logger } from './LoggerService.old';
+import { bot, conf } from '../conf';
 
 
 
@@ -56,7 +56,7 @@ class BirthdayNotifyServ {
           if (birthdayDate.month === now.month && birthdayDate.date === now.date && !this.usersNotified.includes(user.id)) {
             this.usersNotified.push(user.id);
 
-            this.notifyChat(user, config.mainChatId);
+            this.notifyChat(user, conf.mainChatId);
           };
 
           if (now.timestamp > threeDaysBirthdayOffset && now.timestamp < birthdayDateNow && !this.usersNotifiedThreeDays.includes(user.id)) {

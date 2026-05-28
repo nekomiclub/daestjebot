@@ -7,14 +7,22 @@ export enum USER_RIGHTS {
 
 
 export interface IUser {
+  /** User telegram id */
   id: number
+
+  /** User public name */
   name: string
+
+  /** User chats in */
   participateChatsIds: number[]
+
+  /** Rights */
   rights: USER_RIGHTS[]
 
-  username?: string
+  /** User username */
+  username?: string | null
 
-  /** utc-0 timestamp */
+  /** User birthday UTC timestamp */
   birthday?: number
 }
 
