@@ -1,9 +1,9 @@
 import { HydratedDocument } from 'mongoose';
-import IUser from '../types/IUser';
-import { UserModel } from '../models/UserModel';
+import IUser from '~/types/IUser';
+import { UserModel } from '~/models/UserModel';
 import { Message } from 'node-telegram-bot-api';
-import { Logger } from '../services/LoggerService.old';
 import { messageDTO } from './DTOs';
+import Logger from '~/services/LoggerService';
 
 
 

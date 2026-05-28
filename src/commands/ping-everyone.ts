@@ -1,8 +1,8 @@
-import { bot, conf } from '../conf';
-import { messageDTO } from '../handlers/DTOs';
-import { mentionUser } from '../handlers/service';
-import { UserModel } from '../models/UserModel';
-import { CommandsList, ICommandProps } from '../types/types';
+import { bot, conf } from '~/conf';
+import { messageDTO } from '~/handlers/DTOs';
+import { UserModel } from '~/models/UserModel';
+import { CommandsList, ICommandProps } from '~/types/types';
+import { mentionUser } from '~/utils/utils';
 
 
 

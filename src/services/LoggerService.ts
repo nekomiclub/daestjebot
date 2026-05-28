@@ -1,8 +1,8 @@
-import conf from '../conf';
+import conf from '~/conf';
 import winston, { format } from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
-import { getUTC } from '../handlers/service';
-import toBytes from '../utils/to-bytes';
+import toBytes from '~/utils/to-bytes';
+import { getUTC } from '~/utils/utils';
 
 
 

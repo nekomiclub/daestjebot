@@ -1,9 +1,9 @@
 import { HydratedDocument } from 'mongoose';
-import { getUTC, mentionUser, randomNumberBetween } from '../handlers/service';
-import { UserModel } from '../models/UserModel';
-import IUser, { USER_RIGHTS } from '../types/IUser';
-import { Logger } from './LoggerService.old';
-import { bot, conf } from '../conf';
+import { UserModel } from '~/models/UserModel';
+import IUser, { USER_RIGHTS } from '~/types/IUser';
+import { bot, conf } from '~/conf';
+import Logger from './LoggerService';
+import { getUTC, mentionUser, randomBetween } from '~/utils/utils';
 
 
 
@@ -65,11 +65,11 @@ class BirthdayNotifyServ {
             this.notifyThreeDays(user);
           }
         } catch (e) {
-          Logger.fail(`[BirthdayNotifyServ]: Poll map users error`, e);
+          Logger.error(`[BirthdayNotifyServ]: Poll map users error`, e);
         }
       }
     } catch (e) {
-      Logger.fail(`[BirthdayNotifyServ]: Poll error`, e);
+      Logger.error(`[BirthdayNotifyServ]: Poll error`, e);
     }
   }
 
@@ -78,7 +78,7 @@ class BirthdayNotifyServ {
     try {
       if (user.participateChatsIds.includes(chatId)) {
         const celebrateMsg = await bot.sendPhoto(chatId, `https://cataas.com/cat?ts=${getUTC().timestamp}`, {
-          caption: `З днем народження ${mentionUser(user)}! 🥳🎂🥂\n${BirthdayMessages[randomNumberBetween(0, BirthdayMessages.length - 1)]}\n\nДавайте вип'єм за ту дату, Коли мама дала тату. 🍻`,
+          caption: `З днем народження ${mentionUser(user)}! 🥳🎂🥂\n${BirthdayMessages[randomBetween(0, BirthdayMessages.length - 1)]}\n\nДавайте вип'єм за ту дату, Коли мама дала тату. 🍻`,
           parse_mode: 'Markdown'
         });
 
@@ -89,7 +89,7 @@ class BirthdayNotifyServ {
         Logger.warn(`[BirthdayNotifyServ]: User (${user.id}) is not participate in required chat (#${chatId})`);
       }
     } catch (e) {
-      Logger.fail(`[BirthdayNotifyServ]: Chats notify error`, e);
+      Logger.error(`[BirthdayNotifyServ]: Chats notify error`, e);
     }
   }
 
@@ -104,7 +104,7 @@ class BirthdayNotifyServ {
         await bot.sendMessage(notify.id, `Сап, the chosen one 👋\n\n🎂 Нагадую, у ${mentionUser(user)} скоро буде день народження (${getUTC(user.birthday).fulldate}), бажаю удачі!`, { parse_mode: 'Markdown' });
       }
     } catch (e) {
-      Logger.fail(`[BirthdayNotifyServ]: Three days notify error occured`, e);
+      Logger.error(`[BirthdayNotifyServ]: Three days notify error occured`, e);
     }
   }
 }

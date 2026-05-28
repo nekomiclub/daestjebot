@@ -1,9 +1,11 @@
 import mongoose from 'mongoose';
-import { bot, conf } from './conf';
-import { Logger } from './services/LoggerService.old';
+import { bot, DevelopmentMode, ProductionMode } from './conf';
 import BirthdayNotifyService from './services/BirthdayNotifyService';
 import PMController from './controllers/pm-controller';
 import GroupController from './controllers/group-controller';
+import env from './utils/env';
+import Logger from './services/LoggerService';
+import { getUTC } from './utils/utils';
 
 
 
@@ -18,13 +20,13 @@ async function runtime() {
       ----------------------------
       BOT STARTED UP
     
-      Date: ${conf.startedAt} UTC
-      Mode: ${conf.startedMode}
+      Date: ${`${getUTC().fulldate} ${getUTC().fulldate} ${getUTC().time}`} UTC
+      Mode: ${`${ProductionMode ? 'Production' : DevelopmentMode ? 'Development' : 'UNKNOWN'}`}
       ----------------------------
         `);
 
     bot.on('message', msg => {
-      Logger.trace(`[${msg.from?.username ?? msg.from?.id}/${msg.chat.id}]: ${msg.text}`);
+      Logger.verbose(`[${msg.from?.username ?? msg.from?.id}/${msg.chat.id}]: ${msg.text}`);
 
       if (msg.chat.type === 'group' || msg.chat.type === 'supergroup') return GroupController(msg);
       if (msg.chat.type === 'private') return PMController(msg);
@@ -52,7 +54,7 @@ runtime();
 /** Connect to the mongodb */
 async function ConnectMongoDB() {
   mongoose.set('strictQuery', false);
-  await mongoose.connect(conf.mongodbUrl, {
+  await mongoose.connect(`mongodb+srv://${env('MONGODB_USR')}:${env('MONGODB_PWD')}@${env('MONGODB_HOST')}`, {
     retryWrites: true,
   });
 }

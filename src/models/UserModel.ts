@@ -1,5 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
-import IUser from '../types/IUser';
+import IUser from '~/types/IUser';
 
 
 

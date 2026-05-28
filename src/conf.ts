@@ -1,23 +1,5 @@
 import TelegramApi from 'node-telegram-bot-api';
-import { config as dotenvCfg } from 'dotenv';
-import { getUTC } from './handlers/service';
-import path from 'path';
-
-
-
-// Preflight
-dotenvCfg();
-
-
-
-const env = {
-  BOT_TOKEN: String(process.env['BOT_TOKEN']),
-  DB_NAME: String(process.env['DB_NAME']),
-  DB_USR: String(process.env['DB_USR']),
-  DB_PWD: String(process.env['DB_PWD']),
-
-  ISDOCKER: process.env['ISDOCKER'] == 'true',
-};
+import env from './utils/env';
 
 
 
@@ -26,11 +8,10 @@ export const ProductionMode = process.argv.includes('prodMode');
 export const TestMode = process.argv.includes('testMode');
 
 export const adminId = 1030829551;
-const logsDir = env.ISDOCKER ? '/logs' : `${path.resolve()}/logs`;
 
 
 
-export const bot = new TelegramApi(env.BOT_TOKEN, {
+export const bot = new TelegramApi(env('TELEGRAM_BOT_TOKEN'), {
   polling: {
     autoStart: true,
     params: {
@@ -40,21 +21,15 @@ export const bot = new TelegramApi(env.BOT_TOKEN, {
 });
 
 export const conf = {
-  logsDir,
-  mongodbUrl: `mongodb+srv://${env.DB_USR}:${env.DB_PWD}@default.saj4se1.mongodb.net/${env.DB_NAME}?retryWrites=true&w=majority&appName=default`,
-  startedAt: `${getUTC().fulldate} ${getUTC().timeAccurate}`,
-  startedMode: `${ProductionMode ? 'Production' : DevelopmentMode ? 'Development' : 'UNKNOWN'}`,
   superadminId: 1030829551,
   curatorsIds: [697514948, 1386161279, 531261619],
   mainChatId: ProductionMode ? -1003067202557 : -1002939508402,
 
   variables: {
     volumes: {
-      logs: env.ISDOCKER ? '/logs' : './logs'
+      logs: env('ID_DOCKER') ? '/logs' : './logs'
     },
   },
-
-  env,
 };
 
 export default conf;

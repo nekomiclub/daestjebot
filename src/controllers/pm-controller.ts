@@ -1,10 +1,10 @@
 import { Message } from 'node-telegram-bot-api';
-import { Logger } from '../services/LoggerService.old';
-import getUser from '../handlers/get-user';
-import { messageDTO } from '../handlers/DTOs';
-import { CommandsList, ICommandProps } from '../types/types';
-import { conf } from '../conf';
-import changeBirthdayCommand from '../commands/change-birthday';
+import getUser from '~/handlers/get-user';
+import { messageDTO } from '~/handlers/DTOs';
+import { CommandsList, ICommandProps } from '~/types/types';
+import { conf } from '~/conf';
+import changeBirthdayCommand from '~/commands/change-birthday';
+import Logger from '~/services/LoggerService';
 
 
 

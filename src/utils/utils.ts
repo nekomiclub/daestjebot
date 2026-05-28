@@ -1,0 +1,80 @@
+import z from 'zod';
+import IUser from '~/types/IUser';
+
+
+
+/** 
+ * Get UTC date
+ * 
+ * @param ts ISO/UTC string, timestamp or Date
+ */
+export function getUTC(ts?: string | number | Date) {
+  const now = new Date(ts ?? new Date());
+
+  const year = now.getUTCFullYear();
+  const month = String(now.getUTCMonth()).padStart(2, '0');
+  const date = String(now.getUTCDate()).padStart(2, '0');
+  const weekDay = now.getUTCDay();
+  const hrs = String(now.getUTCHours()).padStart(2, '0');
+  const mins = String(now.getUTCMinutes()).padStart(2, '0');
+  const secs = String(now.getUTCSeconds()).padStart(2, '0');
+  const ms = String(now.getUTCMilliseconds()).padStart(4, '0');
+
+  return {
+    year,
+    month: +month,
+    date: +date,
+    weekDay,
+    hrs: +hrs,
+    mins: +mins,
+    secs: +secs,
+    ms: +ms,
+    timestamp: now.getTime(),
+    fulldate: `${date}.${month}.${year}`,
+    time: `${hrs}:${mins}:${secs}`,
+
+    /** Stringified values (with pads) */
+    str: { month, hrs, mins, secs, ms },
+
+    ISO: now.toISOString(),
+  };
+}
+
+
+
+export function endWithin(startedAt: number): string {
+  return `${getUTC().timestamp - startedAt}ms`;
+}
+
+
+
+/** 
+ * Trim string and remove all excess spaces
+ * 
+ * @example "   Hello  World  " > "Hello World"
+ */
+export function trimString(input: string) {
+  return input.trim().replace(/\s+/g, ' ');
+}
+
+
+
+/** Get random number between min and max */
+export function randomBetween(min: number, max: number): number {
+  return Math.floor(min + Math.random() * (max + 1 - min));
+}
+
+
+
+/** Parse zod booleanish ("false") values to real boolean (false) */
+export const zBoolean = z.preprocess((value) => {
+  if (value === 'true') return true;
+  if (value === 'false') return false;
+  return value;
+}, z.boolean());
+
+
+
+export function mentionUser(user: IUser) {
+  return `[${user.username ? `@${user.username}` : user.name}](tg://user?id=${user.id})`;
+}

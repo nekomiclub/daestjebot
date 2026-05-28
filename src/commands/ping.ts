@@ -1,6 +1,6 @@
-import { bot } from '../conf';
-import { messageDTO } from '../handlers/DTOs';
-import { ICommandProps } from '../types/types';
+import { bot } from '~/conf';
+import { messageDTO } from '~/handlers/DTOs';
+import { ICommandProps } from '~/types/types';
 
 
 

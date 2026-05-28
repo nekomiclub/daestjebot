@@ -1,9 +1,9 @@
-import { bot } from '../conf';
-import { messageDTO } from '../handlers/DTOs';
-import { getUTC } from '../handlers/service';
-import { UserModel } from '../models/UserModel';
-import { Logger } from '../services/LoggerService.old';
-import { CommandsList, ICommandProps } from '../types/types';
+import { bot } from '~/conf';
+import { messageDTO } from '~/handlers/DTOs';
+import { UserModel } from '~/models/UserModel';
+import Logger from '~/services/LoggerService';
+import { CommandsList, ICommandProps } from '~/types/types';
+import { getUTC } from '~/utils/utils';
 
 
 
@@ -21,7 +21,7 @@ export default async function changeBirthdayCommand({ msg }: ICommandProps) {
   date.setUTCDate(Number(dateParts[0]));
   date.setUTCHours(0, 0, 0, 0);
 
-  const user = await UserModel.findOne({ $or: [{ username: query }, { id: query }] });
+  const user = await UserModel.findOne({ $or: [{ username: query }, { id: +query }] });
   if (!user) return bot.sendMessage(chatId, `no user found with this username / id`);
   if (isNaN(+date)) return bot.sendMessage(chatId, `invalid date (should be dd.mm.yyyy)`);
 
