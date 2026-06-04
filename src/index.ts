@@ -9,6 +9,10 @@ import GroupController from './controllers/group-controller';
 
 
 
+bot.setMyCommands([
+  { command: '/help', description: 'ℹ️ Інформація' }
+]);
+
 async function runtime() {
   try {
     // === Establish database connection

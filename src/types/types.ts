@@ -6,6 +6,7 @@ import IUser from './IUser';
 
 export const CommandsList = {
   PING: /^\/ping/gi,
+  HELP: /^\/help/gi,
 };
 
 

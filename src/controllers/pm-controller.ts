@@ -3,7 +3,8 @@ import getUser from '~/handlers/get-user';
 import { messageDTO } from '~/handlers/DTOs';
 import { CommandsList, ICommandProps } from '~/types/types';
 import Logger from '~/services/LoggerService';
-import PingCommand from '~/commands/ping';
+import PMHelpCommand from '~/commands/PMHelp';
+import PingCommand from '~/commands/Ping';
 
 
 
@@ -22,6 +23,7 @@ export default async function PMController(message: Message) {
 
 
     if (text.match(CommandsList.PING)) return await PingCommand(command);
+    if (text.match(CommandsList.HELP)) return await PMHelpCommand(command);
   } catch (e) {
     Logger.error(`[PM]: An error occured at private chat`, e);
   }

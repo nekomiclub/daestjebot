@@ -2,8 +2,9 @@ import { Message } from 'node-telegram-bot-api';
 import getUser from '~/handlers/get-user';
 import { messageDTO } from '~/handlers/DTOs';
 import { CommandsList, ICommandProps } from '~/types/types';
-import PingCommand from '~/commands/ping';
+import PingCommand from '~/commands/Ping';
 import Logger from '~/services/LoggerService';
+import GroupHelpCommand from '~/commands/GroupHelp';
 
 
 
@@ -39,6 +40,7 @@ export default async function GroupController(message: Message) {
 
 
     if (text.match(CommandsList.PING)) return await PingCommand(command);
+    if (text.match(CommandsList.HELP)) return await GroupHelpCommand(command);
   } catch (e) {
     Logger.error(`[Group]: An error occured at group chat`, e);
   }
