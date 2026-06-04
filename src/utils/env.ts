@@ -15,10 +15,14 @@ export const EnvConfigSchema = z.object({
   MONGODB_USR: z.string().nonempty(),
   MONGODB_PWD: z.string().nonempty(),
 
+  NODE_ENV: z.enum(['production', 'development']),
+
+  TELEGRAM_API_ID: z.coerce.number().min(0),
+  TELEGRAM_API_HASH: z.string().nonempty(),
   TELEGRAM_BOT_TOKEN: z.string().nonempty(),
 
   /** Whether is docker environment */
-  ID_DOCKER: zBoolean,
+  IS_DOCKER: zBoolean.optional(),
 });
 
 export type TEnvConfigSchema = z.infer<typeof EnvConfigSchema>
@@ -33,7 +37,9 @@ export function parseEnv(): z.infer<typeof EnvConfigSchema> {
     return EnvConfigSchema.parse(process.env);
   } catch (e) {
     if (e instanceof ZodError) {
-      throw new Error(`[Env]: Env parse is invalid. Errors: ${JSON.stringify(z.treeifyError(e).errors, null, 2)}`);
+      console.log(e);
+
+      throw new Error(`[Env]: Env parse is invalid. Errors: ${JSON.stringify(e, null, 2)}`);
     } else throw e;
   }
 }

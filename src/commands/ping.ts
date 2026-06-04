@@ -4,8 +4,9 @@ import { ICommandProps } from '~/types/types';
 
 
 
-export default async function ping({ msg }: ICommandProps) {
-  const { chat, chatId } = messageDTO(msg);
+/** Ping/Pong command */
+export default async function PingCommand({ message }: ICommandProps) {
+  const { chat, chatId } = messageDTO(message);
 
   await bot.sendMessage(chatId, `🏓 pong!`);
 }

@@ -1,39 +1,44 @@
 import { Message } from 'node-telegram-bot-api';
-import { USER_RIGHTS } from '~/types/IUser';
-import { conf } from '~/conf';
 import getUser from '~/handlers/get-user';
-import grantPermCommand from '~/commands/grant-perm';
 import { messageDTO } from '~/handlers/DTOs';
-import revokePermCommand from '~/commands/revoke-perm';
-import pingEveryoneCommand, { pingCurators, pingStudents } from '~/commands/ping-everyone';
 import { CommandsList, ICommandProps } from '~/types/types';
-import ping from '~/commands/ping';
+import PingCommand from '~/commands/ping';
 import Logger from '~/services/LoggerService';
 
 
 
-export default async function GroupController(msg: Message) {
+/** Groups controller */
+export default async function GroupController(message: Message) {
   try {
-    const { chat, chatId, from, text } = messageDTO(msg);
-
-    // Drop bots
-    if (from?.is_bot) return;
+    const { chat, chatId, from, text } = messageDTO(message);
 
     // Drop undefined
     if (!from || !text) return;
 
+    // Drop bots
+    if (from.is_bot) return;
+
     // Get user
-    const user = await getUser(msg);
-    const cp: ICommandProps = { msg, user };
+    const user = await getUser(message);
+    const command: ICommandProps = { message, user };
 
 
 
-    if (text.match(CommandsList.GRANT_PERM) && user.id === conf.superadminId) await grantPermCommand(cp);
-    if (text.match(CommandsList.REVOKE_PERM) && user.id === conf.superadminId) await revokePermCommand(cp);
-    if (text.match(CommandsList.PING_EVERYONE) && user.rights.includes(USER_RIGHTS.CAN_PING)) await pingEveryoneCommand(cp);
-    if (text.match(CommandsList.PING_STUDENTS) && user.rights.includes(USER_RIGHTS.CAN_PING)) await pingStudents(cp);
-    if (text.match(CommandsList.PING_CURATORS) && user.rights.includes(USER_RIGHTS.CAN_PING)) await pingCurators(cp);
-    if (text.match(CommandsList.PING)) await ping(cp);
+    // if (text.match('/kek')) {
+    //   const participants = await client.invoke(new Api.channels.GetParticipants({
+    //     channel: chatId,
+    //     filter: new Api.ChannelParticipantsRecent(),
+    //     offset: 0,
+    //     limit: 200
+    //   }));
+
+    //   // @ts-ignore
+    //   console.log(participants.users.map(el => el.id.value.toString()));
+    // }
+
+
+
+    if (text.match(CommandsList.PING)) return await PingCommand(command);
   } catch (e) {
     Logger.error(`[Group]: An error occured at group chat`, e);
   }
