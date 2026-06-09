@@ -1,6 +1,6 @@
 import z from 'zod';
 import conf from '~/conf';
-import IUser from '~/types/IUser';
+import TUser from '~/types/TUser';
 import { CallbackType } from '~/types/types';
 
 
@@ -128,7 +128,7 @@ export const zBoolean = z.preprocess((value) => {
 
 
 
-export function mentionUser(user: IUser) {
+export function mentionUser(user: TUser) {
   return `[${user.username ? `@${user.username}` : user.name}](tg://user?id=${user.id})`;
 }
 
@@ -142,7 +142,7 @@ export function joinString(subs: Array<string | null | undefined | number | fals
 
 
 /** Get user's birthday props */
-export function getUserBirthday(user: IUser) {
+export function getUserBirthday(user: TUser) {
   const birthdayTimeout = user.birthday_changed_at ? getUTC(user.birthday_changed_at).timestamp + conf.variables.changeBirthdayTimeout : 0;
   const canChangeBirthday = !birthdayTimeout ? true : getUTC().timestamp > getUTC(birthdayTimeout).timestamp;
 

@@ -1,6 +1,6 @@
 import { HydratedDocument } from 'mongoose';
 import { UserModel } from '~/models/UserModel';
-import IUser, { USER_RIGHTS } from '~/types/IUser';
+import TUser, { USER_RIGHTS } from '~/types/TUser';
 import { bot, conf } from '~/conf';
 import Logger from './LoggerService';
 import { getUTC, mentionUser, randomBetween } from '~/utils/utils';
@@ -74,7 +74,7 @@ class BirthdayNotifyServ {
   }
 
   /** Notify users chat */
-  async notifyChat(user: HydratedDocument<IUser>, chatId: number) {
+  async notifyChat(user: HydratedDocument<TUser>, chatId: number) {
     try {
       if (user.participateChatsIds.includes(chatId)) {
         const celebrateMsg = await bot.sendPhoto(chatId, `https://cataas.com/cat?ts=${getUTC().timestamp}`, {
@@ -94,7 +94,7 @@ class BirthdayNotifyServ {
   }
 
   /** Notify chosen users about soon someone birthday */
-  async notifyThreeDays(user: HydratedDocument<IUser>) {
+  async notifyThreeDays(user: HydratedDocument<TUser>) {
     try {
       const notifyPoll = await UserModel.find({ rights: { $in: [USER_RIGHTS.BIRTHDAY_NOTIFY_3DAYS] } });
 

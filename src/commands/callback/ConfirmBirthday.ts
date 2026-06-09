@@ -1,5 +1,5 @@
 import { bot } from '~/conf';
-import { messageDTO } from '~/handlers/DTOs';
+import { messageDTO } from '~/utils/DTOs';
 import { UserModel } from '~/models/UserModel';
 import { CallbackList, CallbackType, ICommandProps } from '~/types/types';
 import { daysBetween, getUserBirthday, getUTC, wordDeclination } from '~/utils/utils';
@@ -27,7 +27,7 @@ export default async function ConfirmBirthdayCallback({ message, user }: IComman
 
   const date = getUTC(Number(data.replace(CallbackList.CONFIRM_BIRTHDAY, '')));
 
-  hydratedUser.birthday = date.timestamp;
+  hydratedUser.birthday_at = date.ISO;
   hydratedUser.birthday_changed_at = getUTC().ISO;
 
   await hydratedUser.save();

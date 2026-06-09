@@ -1,6 +1,6 @@
 import { Message } from 'node-telegram-bot-api';
 import getUser from '~/utils/get-user';
-import { messageDTO } from '~/handlers/DTOs';
+import { messageDTO } from '~/utils/DTOs';
 import Logger from '~/services/LoggerService';
 import { CallbackList, CallbackType, ICommandProps } from '~/types/types';
 import ConfirmBirthdayCallback from '~/commands/callback/ConfirmBirthday';

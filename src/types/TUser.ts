@@ -6,26 +6,32 @@ export enum USER_RIGHTS {
 
 
 
-export interface IUser {
+export type TUser = {
   /** User telegram id */
   id: number
 
   /** User public name */
-  name?: string
+  name: string | null
 
-  /** User chats in */
+  /** @deprecated User chats in */
   participateChatsIds: number[]
 
-  /** Rights */
+  /** User chats */
+  participate_at: number[]
+
+  /** @deprecated Rights */
   rights: USER_RIGHTS[]
 
   /** User username */
-  username?: string | null
+  username: string | null
 
-  /** User birthday UTC timestamp */
+  /** @deprecated User birthday UTC timestamp */
   birthday?: number
 
 
+
+  /** ISO timestamp of birthday date */
+  birthday_at: string | null
 
   /** ISO timestamp of birthday changed date */
   birthday_changed_at: string | null
@@ -33,4 +39,4 @@ export interface IUser {
 
 
 
-export default IUser;
+export default TUser;

@@ -1,6 +1,6 @@
 import { HydratedDocument } from 'mongoose';
 import { Message } from 'node-telegram-bot-api';
-import IUser from './IUser';
+import TUser from './TUser';
 
 
 
@@ -24,5 +24,5 @@ export const CommandsList = {
 
 export interface ICommandProps {
   message: Message
-  user: HydratedDocument<IUser>
+  user: HydratedDocument<TUser>
 }

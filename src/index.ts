@@ -10,10 +10,6 @@ import { CallbackType } from './types/types';
 
 
 
-bot.setMyCommands([
-  { command: '/help', description: 'ℹ️ Інформація' }
-]);
-
 async function runtime() {
   try {
     // === Establish database connection
@@ -28,13 +24,21 @@ async function runtime() {
       ----------------------------
       BOT STARTED UP
     
-      Date: ${`${getUTC().fulldate} ${getUTC().fulldate} ${getUTC().time}`} UTC
-      Mode: ${`${ProductionMode ? 'Production' : DevelopmentMode ? 'Development' : 'UNKNOWN'}`}
+      Date: ${getUTC().fulldate} ${getUTC().time} UTC
+      Mode: ${ProductionMode ? 'Production' : DevelopmentMode ? 'Development' : 'UNKNOWN'}
       ----------------------------
         `);
 
 
 
+    // === Set hint commands for default chat type 
+    bot.setMyCommands([
+      { command: '/help', description: 'ℹ️ Інформація' }
+    ]);
+
+
+
+    // === Handle messages
     bot.on('message', message => {
       if (message.chat.type === 'group' || message.chat.type === 'supergroup') return GroupController(message);
       if (message.chat.type === 'private') return PMController(message);
@@ -44,6 +48,9 @@ async function runtime() {
       });
     });
 
+
+
+    // === Handle callback queries 
     bot.on('callback_query', query => {
       if (!query.message) return;
 

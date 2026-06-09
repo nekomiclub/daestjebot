@@ -1,5 +1,5 @@
 import { bot } from '~/conf';
-import { messageDTO } from '~/handlers/DTOs';
+import { messageDTO } from '~/utils/DTOs';
 import { CommandsList, ICommandProps } from '~/types/types';
 import { callbackType, daysBetween, getUserBirthday, getUTC, wordDeclination } from '~/utils/utils';
 
