@@ -13,12 +13,14 @@ export default async function getUser(msg: Message): Promise<HydratedDocument<IU
 
   let user = await UserModel.findOne({ id: from.id });
   let isUserModified = false;
+
   if (!user) {
     const payload: IUser = {
       id: from.id,
       name: from.first_name,
       username: from.username,
       participateChatsIds: [chatId],
+      birthday_changed_at: null,
       rights: [],
     };
 

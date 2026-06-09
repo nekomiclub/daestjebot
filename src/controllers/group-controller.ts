@@ -4,7 +4,7 @@ import { messageDTO } from '~/handlers/DTOs';
 import { CommandsList, ICommandProps } from '~/types/types';
 import PingCommand from '~/commands/Ping';
 import Logger from '~/services/LoggerService';
-import GroupHelpCommand from '~/commands/GroupHelp';
+import GroupHelpCommand from '~/commands/group/GroupHelp';
 
 
 

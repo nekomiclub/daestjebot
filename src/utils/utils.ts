@@ -1,5 +1,7 @@
 import z from 'zod';
+import conf from '~/conf';
 import IUser from '~/types/IUser';
+import { CallbackType } from '~/types/types';
 
 
 
@@ -12,7 +14,7 @@ export function getUTC(ts?: string | number | Date) {
   const now = new Date(ts ?? new Date());
 
   const year = now.getUTCFullYear();
-  const month = String(now.getUTCMonth()).padStart(2, '0');
+  const month = String(now.getUTCMonth() + 1).padStart(2, '0');
   const date = String(now.getUTCDate()).padStart(2, '0');
   const weekDay = now.getUTCDay();
   const hrs = String(now.getUTCHours()).padStart(2, '0');
@@ -22,7 +24,7 @@ export function getUTC(ts?: string | number | Date) {
 
   return {
     year,
-    month: +month,
+    month: +month - 1,
     date: +date,
     weekDay,
     hrs: +hrs,
@@ -34,10 +36,61 @@ export function getUTC(ts?: string | number | Date) {
     time: `${hrs}:${mins}:${secs}`,
 
     /** Stringified values (with pads) */
-    str: { month, hrs, mins, secs, ms },
+    str: { month, date, hrs, mins, secs, ms },
 
     ISO: now.toISOString(),
   };
+}
+
+
+
+/** Get days between two dates within the same year */
+export function daysBetween(start: string, end: string) {
+  const baseYear = new Date().getUTCFullYear();
+
+  const parseDayMonth = (value: string, year: number): Date | null => {
+    const match = /^(\d{2})\.(\d{2})$/.exec(value);
+
+    // Reject date
+    if (!match) return null;
+
+    const [, dayStr, monthStr] = match;
+    const day = Number(dayStr);
+    const month = Number(monthStr) - 1;
+
+    const date = new Date();
+
+    date.setUTCFullYear(year, month, day);
+    date.setUTCHours(0, 0, 0, 0);
+
+    // Validate that the resulting date matches the input
+    if (
+      date.getUTCFullYear() !== year ||
+      date.getUTCMonth() !== month ||
+      date.getUTCDate() !== day
+    ) {
+      return null; // Invalid calendar date
+    }
+
+    return date;
+  };
+
+  const startDate = parseDayMonth(start, baseYear);
+  let endDate = parseDayMonth(end, baseYear);
+
+  if (!startDate || !endDate) return null;
+
+
+
+  // If end is earlier in the calendar, assume next year
+  if (endDate < startDate) endDate = parseDayMonth(end, baseYear + 1);
+  if (!endDate) return null;
+
+  const msPerDay = 24 * 60 * 60 * 1000;
+
+  return Math.floor(
+    (endDate.getTime() - startDate.getTime()) / msPerDay
+  );
 }
 
 
@@ -78,3 +131,24 @@ export const zBoolean = z.preprocess((value) => {
 export function mentionUser(user: IUser) {
   return `[${user.username ? `@${user.username}` : user.name}](tg://user?id=${user.id})`;
 }
+
+
+
+/** Join substring with null filtering */
+export function joinString(subs: Array<string | null | undefined | false>) {
+  return subs.filter(el => Boolean(el)).join(' ');
+}
+
+
+
+/** Get user's birthday props */
+export function getUserBirthday(user: IUser) {
+  const birthdayTimeout = user.birthday_changed_at ? getUTC(user.birthday_changed_at).timestamp + conf.variables.changeBirthdayTimeout : 0;
+  const canChangeBirthday = !birthdayTimeout ? true : getUTC(birthdayTimeout).timestamp > getUTC().timestamp;
+
+  return { birthdayTimeout, canChangeBirthday, date: user.birthday_changed_at };
+}
+
+
+
+export const callbackType = (value: CallbackType): CallbackType => value;

@@ -3,8 +3,10 @@ import getUser from '~/handlers/get-user';
 import { messageDTO } from '~/handlers/DTOs';
 import { CommandsList, ICommandProps } from '~/types/types';
 import Logger from '~/services/LoggerService';
-import PMHelpCommand from '~/commands/PMHelp';
+import PMHelpCommand from '~/commands/pm/PMHelp';
 import PingCommand from '~/commands/Ping';
+import MyBirthdayCommand from '~/commands/pm/MyBirthday';
+import SetMyBirthday from '~/commands/pm/SetMyBirthday';
 
 
 
@@ -20,10 +22,10 @@ export default async function PMController(message: Message) {
     const user = await getUser(message);
     const command: ICommandProps = { message, user };
 
-
-
     if (text.match(CommandsList.PING)) return await PingCommand(command);
     if (text.match(CommandsList.HELP)) return await PMHelpCommand(command);
+    if (text.match(CommandsList.MY_BIRTHDAY)) return await MyBirthdayCommand(command);
+    if (text.match(CommandsList.SET_MY_BIRTHDAY)) return await SetMyBirthday(command);
   } catch (e) {
     Logger.error(`[PM]: An error occured at private chat`, e);
   }

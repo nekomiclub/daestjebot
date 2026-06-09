@@ -8,10 +8,12 @@ import { ICommandProps } from '~/types/types';
 export default async function GroupHelpCommand({ message }: ICommandProps) {
   const { chat, chatId } = messageDTO(message);
 
-  await bot.sendMessage(chatId, `
+
+
+  return await bot.sendMessage(chatId, `
 === 🌿 daestje bot help ===
 
-Цей бот робить те, що інші не роблять, ще й повідомлення не зберігає! 🔒
+Цей бот може відмічати всіх учасників групи та вітати їх з днем народження
 
 /ping - 🏓 pong!
 /birthdays - Редагувати сповіщення про дні народження учасників групи (👮)

@@ -9,5 +9,6 @@ export const UserModel = mongoose.model<IUser>('user', new Schema({
   username: String,
   participateChatsIds: Array,
   rights: Array,
-  birthday: Number
+  birthday: Number,
+  birthday_changed_at: String
 }));

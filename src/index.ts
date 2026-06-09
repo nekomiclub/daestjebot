@@ -1,11 +1,12 @@
 import mongoose from 'mongoose';
-import { bot, client, DevelopmentMode, ProductionMode } from './conf';
-import BirthdayNotifyService from './services/BirthdayNotifyService';
+import { bot, DevelopmentMode, ProductionMode } from './conf';
 import env from './utils/env';
 import Logger from './services/LoggerService';
 import { getUTC } from './utils/utils';
 import PMController from './controllers/pm-controller';
 import GroupController from './controllers/group-controller';
+import CallbackController from './controllers/callback-controller';
+import { CallbackType } from './types/types';
 
 
 
@@ -19,7 +20,7 @@ async function runtime() {
     await ConnectMongoDB();
 
     // === Connect telegram client
-    await client.start({ botAuthToken: env('TELEGRAM_BOT_TOKEN') });
+    // await client.start({ botAuthToken: env('TELEGRAM_BOT_TOKEN') });
 
 
 
@@ -43,9 +44,11 @@ async function runtime() {
       });
     });
 
+    bot.on('callback_query', q => {
+      if (!q.message) return;
 
-
-    BirthdayNotifyService.startCRON();
+      return CallbackController(q.message, q.data as CallbackType | undefined);
+    });
   } catch (e) {
     Logger.error(`[System/Init]: FATAL ERROR OCCURED. MESSAGE: `, e);
 
@@ -63,7 +66,7 @@ runtime();
 /** Connect to the mongodb */
 async function ConnectMongoDB() {
   mongoose.set('strictQuery', false);
-  await mongoose.connect(`mongodb+srv://${env('MONGODB_USR')}:${env('MONGODB_PWD')}@${env('MONGODB_HOST')}`, {
+  await mongoose.connect(`mongodb+srv://${env('MONGODB_USR')}:${env('MONGODB_PWD')}@${env('MONGODB_HOST')}/${env('MONGODB_DB')}`, {
     retryWrites: true,
   });
 }

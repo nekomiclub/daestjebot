@@ -24,6 +24,11 @@ export interface IUser {
 
   /** User birthday UTC timestamp */
   birthday?: number
+
+
+
+  /** ISO timestamp of birthday changed date */
+  birthday_changed_at: string | null
 }
 
 

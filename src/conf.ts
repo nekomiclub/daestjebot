@@ -2,6 +2,7 @@ import TelegramApi from 'node-telegram-bot-api';
 import env from './utils/env';
 import { TelegramClient } from 'telegram';
 import { StringSession } from 'telegram/sessions';
+import ms from 'ms';
 
 
 
@@ -34,6 +35,8 @@ export const conf = {
     volumes: {
       logs: env('IS_DOCKER') ? '/logs' : './logs'
     },
+
+    changeBirthdayTimeout: ms('0.5y')
   },
 };
 
