@@ -1,5 +1,5 @@
 import { Message } from 'node-telegram-bot-api';
-import getUser from '~/handlers/get-user';
+import getUser from '~/utils/get-user';
 import { messageDTO } from '~/handlers/DTOs';
 import Logger from '~/services/LoggerService';
 import { CallbackList, CallbackType, ICommandProps } from '~/types/types';

@@ -11,7 +11,7 @@ export interface IUser {
   id: number
 
   /** User public name */
-  name: string
+  name?: string
 
   /** User chats in */
   participateChatsIds: number[]

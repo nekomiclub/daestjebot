@@ -135,7 +135,7 @@ export function mentionUser(user: IUser) {
 
 
 /** Join substring with null filtering */
-export function joinString(subs: Array<string | null | undefined | false>) {
+export function joinString(subs: Array<string | null | undefined | number | false>) {
   return subs.filter(el => Boolean(el)).join(' ');
 }
 
@@ -144,7 +144,7 @@ export function joinString(subs: Array<string | null | undefined | false>) {
 /** Get user's birthday props */
 export function getUserBirthday(user: IUser) {
   const birthdayTimeout = user.birthday_changed_at ? getUTC(user.birthday_changed_at).timestamp + conf.variables.changeBirthdayTimeout : 0;
-  const canChangeBirthday = !birthdayTimeout ? true : getUTC(birthdayTimeout).timestamp > getUTC().timestamp;
+  const canChangeBirthday = !birthdayTimeout ? true : getUTC().timestamp > getUTC(birthdayTimeout).timestamp;
 
   return { birthdayTimeout, canChangeBirthday, date: user.birthday_changed_at };
 }
@@ -152,3 +152,20 @@ export function getUserBirthday(user: IUser) {
 
 
 export const callbackType = (value: CallbackType): CallbackType => value;
+
+
+
+
+/** Word declination
+ * @example
+ * wordDeclination(1, ['чашка', 'чашки', 'чашок']) => чашка
+ * wordDeclination(2, ['чашка', 'чашки', 'чашок']) => чашки
+ */
+export function wordDeclination(number: number, words_arr: string[]) {
+  number = Math.abs(number);
+  if (Number.isInteger(number)) {
+    let options = [2, 0, 1, 1, 1, 2];
+    return words_arr[(number % 100 > 4 && number % 100 < 20) ? 2 : options[(number % 10 < 5) ? number % 10 : 5]];
+  }
+  return words_arr[1];
+}

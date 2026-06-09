@@ -1,5 +1,5 @@
 import { Message } from 'node-telegram-bot-api';
-import getUser from '~/handlers/get-user';
+import getUser from '~/utils/get-user';
 import { messageDTO } from '~/handlers/DTOs';
 import { CommandsList, ICommandProps } from '~/types/types';
 import PingCommand from '~/commands/Ping';

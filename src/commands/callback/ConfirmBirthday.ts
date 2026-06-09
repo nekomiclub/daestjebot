@@ -2,7 +2,7 @@ import { bot } from '~/conf';
 import { messageDTO } from '~/handlers/DTOs';
 import { UserModel } from '~/models/UserModel';
 import { CallbackList, CallbackType, ICommandProps } from '~/types/types';
-import { daysBetween, getUserBirthday, getUTC } from '~/utils/utils';
+import { daysBetween, getUserBirthday, getUTC, wordDeclination } from '~/utils/utils';
 
 
 
@@ -16,8 +16,9 @@ export default async function ConfirmBirthdayCallback({ message, user }: IComman
   if (!canChangeBirthday) {
     const today = getUTC();
     const birthdayChangeDate = getUTC(birthdayTimeout);
+    const within = daysBetween(`${today.str.date}.${today.str.month}`, `${birthdayChangeDate.str.date}.${birthdayChangeDate.str.month}`) ?? 0;
 
-    return await bot.sendMessage(chatId, `❌ Ти нещодавно вже змінював дату свого народження. \n\n⌚ В наступний раз це можна зробити через ${daysBetween(`${today.str.date}.${today.str.month}`, `${birthdayChangeDate.str.date}.${birthdayChangeDate.str.month}`)} днів (${birthdayChangeDate.fulldate})`);
+    return await bot.sendMessage(chatId, `❌ Ти нещодавно вже змінював дату свого народження. \n\n⌚ В наступний раз це можна зробити через ${within} ${wordDeclination(within, ['день', 'дні', 'днів'])} (${birthdayChangeDate.fulldate})`);
   }
 
   // Set new date

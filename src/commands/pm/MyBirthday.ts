@@ -1,7 +1,7 @@
 import { bot } from '~/conf';
 import { messageDTO } from '~/handlers/DTOs';
 import { ICommandProps } from '~/types/types';
-import { daysBetween, getUserBirthday, getUTC, joinString } from '~/utils/utils';
+import { daysBetween, getUserBirthday, getUTC, joinString, wordDeclination } from '~/utils/utils';
 
 
 
@@ -21,8 +21,9 @@ export default async function MyBirthdayCommand({ message, user }: ICommandProps
     // Send user's birthday if it is specified
     const today = getUTC();
     const birthdayDate = getUTC(user.birthday);
+    const within = daysBetween(`${today.str.date}.${today.str.month}`, `${birthdayDate.str.date}.${birthdayDate.str.month}`) ?? 0;
 
-    return await bot.sendMessage(chatId, joinString([`🍰 Твій день народження буде через ${daysBetween(`${today.str.date}.${today.str.month}`, `${birthdayDate.str.date}.${birthdayDate.str.month}`)} днів (${birthdayDate.fulldate})`, canChangeBirthday && SUGGEST_DATE_CHANGE]));
+    return await bot.sendMessage(chatId, joinString([`🍰 Твій день народження буде через ${within} ${wordDeclination(within, ['день', 'дні', 'днів'])} (${birthdayDate.fulldate})`, canChangeBirthday && SUGGEST_DATE_CHANGE]));
   } else {
     // Suggest user to set his birthday date
 

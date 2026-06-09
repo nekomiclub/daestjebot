@@ -35,19 +35,19 @@ async function runtime() {
 
 
 
-    bot.on('message', msg => {
-      if (msg.chat.type === 'group' || msg.chat.type === 'supergroup') return GroupController(msg);
-      if (msg.chat.type === 'private') return PMController(msg);
+    bot.on('message', message => {
+      if (message.chat.type === 'group' || message.chat.type === 'supergroup') return GroupController(message);
+      if (message.chat.type === 'private') return PMController(message);
 
-      return bot.sendPhoto(msg.chat.id, `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoHWLFJuyEnP3g8pASP6OKlyaE9ZENmqX9gQ&s`, {
+      return bot.sendPhoto(message.chat.id, `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoHWLFJuyEnP3g8pASP6OKlyaE9ZENmqX9gQ&s`, {
         caption: '😶‍🌫️ Бот не підтримує такий тип чатів'
       });
     });
 
-    bot.on('callback_query', q => {
-      if (!q.message) return;
+    bot.on('callback_query', query => {
+      if (!query.message) return;
 
-      return CallbackController(q.message, q.data as CallbackType | undefined);
+      return CallbackController(query.message, query.data as CallbackType | undefined);
     });
   } catch (e) {
     Logger.error(`[System/Init]: FATAL ERROR OCCURED. MESSAGE: `, e);
