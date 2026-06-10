@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { bot, client, DevelopmentMode, ProductionMode } from './conf';
+import { bot, DevelopmentMode, ProductionMode } from './conf';
 import env from './utils/env';
 import Logger from './services/LoggerService';
 import { getUTC } from './utils/utils';
@@ -18,7 +18,7 @@ async function runtime() {
     await ConnectMongoDB();
 
     // === Connect telegram client
-    await client.start({ botAuthToken: env('TELEGRAM_BOT_TOKEN') });
+    // await client.start({ botAuthToken: env('TELEGRAM_BOT_TOKEN') });
 
 
 
@@ -36,7 +36,7 @@ async function runtime() {
     // === Set hint commands for default chat type 
     bot.setMyCommands([
       { command: '/help', description: 'ℹ️ Інформація' }
-    ]);
+    ], { scope: { type: 'default' } });
 
 
 

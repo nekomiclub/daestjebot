@@ -7,6 +7,7 @@ import PMHelpCommand from '~/commands/pm/PMHelp';
 import PingCommand from '~/commands/Ping';
 import MyBirthdayCommand from '~/commands/pm/MyBirthday';
 import SetMyBirthday from '~/commands/pm/SetMyBirthday';
+import BirthdayNotifyCommand from '~/commands/pm/BirthdayNotify';
 
 
 
@@ -28,6 +29,7 @@ export default async function PMController(message: Message) {
     if (text.match(CommandsList.HELP)) return await PMHelpCommand(command);
     if (text.match(CommandsList.MY_BIRTHDAY)) return await MyBirthdayCommand(command);
     if (text.match(CommandsList.SET_MY_BIRTHDAY)) return await SetMyBirthday(command);
+    if (text.match(CommandsList.BIRTHDAY_NOTIFY)) return await BirthdayNotifyCommand(command);
   } catch (e) {
     Logger.error(`[PM]: An error occured at the private chat`, e);
   }

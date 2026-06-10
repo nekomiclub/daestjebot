@@ -1,3 +1,4 @@
+import { InlineKeyboardButton } from 'node-telegram-bot-api';
 import z from 'zod';
 import conf from '~/conf';
 import TUser from '~/types/TUser';
@@ -168,4 +169,13 @@ export function wordDeclination(number: number, words_arr: string[]) {
     return words_arr[(number % 100 > 4 && number % 100 < 20) ? 2 : options[(number % 10 < 5) ? number % 10 : 5]];
   }
   return words_arr[1];
+}
+
+
+
+export function BirthdayNotifyKeyboard(isNotify: boolean): InlineKeyboardButton[] {
+  return [{
+    text: isNotify ? '❌ Ні' : '✅ Так',
+    callback_data: isNotify ? callbackType('birthday_notify_decline') : callbackType('birthday_notify_agree')
+  }];
 }

@@ -40,6 +40,7 @@ export default async function getUser(message: Message, tgUser?: User): Promise<
       username: person.username ?? null,
       birthday_changed_at: null,
       rights: [],
+      recieve_birthday_notifications: false,
       birthday_at: null,
     };
 
@@ -80,11 +81,6 @@ function getPerson(message: Message, tgUser?: User): TPerson | null {
 
 
 
-  //! Drop bots
-  if (from?.is_bot) return null;
-
-
-
   // Retrieve person data from telegram user
   if (tgUser) {
     return tgUser as TPerson;
@@ -100,7 +96,7 @@ function getPerson(message: Message, tgUser?: User): TPerson | null {
   }
 
   // Retrieve person data from from
-  if (from) {
+  if (from && !from.is_bot) {
     return {
       id: from.id,
       first_name: from.first_name,

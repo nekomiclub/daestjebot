@@ -6,11 +6,15 @@ import TUser from './TUser';
 
 export type CallbackType =
   | 'confirm_birthday' // After that should be ";{UTC timestamp}"
+  | 'birthday_notify_agree'
+  | 'birthday_notify_decline'
 
 
 
 export const CallbackList: Record<Uppercase<CallbackType>, RegExp> = {
-  CONFIRM_BIRTHDAY: /confirm_birthday;/gi
+  CONFIRM_BIRTHDAY: /confirm_birthday;/gi,
+  BIRTHDAY_NOTIFY_AGREE: /birthday_notify_agree/gi,
+  BIRTHDAY_NOTIFY_DECLINE: /birthday_notify_decline/gi,
 };
 
 export const CommandsList = {
@@ -19,6 +23,7 @@ export const CommandsList = {
   MY_BIRTHDAY: /^\/my_birthday/gi,
   SET_MY_BIRTHDAY: /^\/set_birthday\s/gi,
   PING_EVERYONE: /^\/all/gi,
+  BIRTHDAY_NOTIFY: /^\/birthday_notify/gi,
 };
 
 

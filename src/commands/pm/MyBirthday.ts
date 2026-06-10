@@ -29,7 +29,7 @@ export default async function MyBirthdayCommand({ message, user }: ICommandProps
   } else {
     // Suggest user to set his birthday date
 
-    return await bot.sendMessage(chatId, joinString([`😶‍🌫️ У тебе відсутня інформація про день народження.`, SUGGEST_DATE_CHANGE]));
+    return await bot.sendMessage(chatId, joinString([`😶‍🌫️ У тебе відсутня інформація про день народження.`, canChangeBirthday && SUGGEST_DATE_CHANGE]));
   }
 }
 
