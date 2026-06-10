@@ -38,11 +38,9 @@ export default async function getUser(message: Message, tgUser?: User): Promise<
       id: person.id,
       name: person.first_name ?? null,
       username: person.username ?? null,
-      participateChatsIds: [chatId],
       birthday_changed_at: null,
       rights: [],
       birthday_at: null,
-      participate_at: [],
     };
 
     user = new UserModel(payload);
@@ -65,24 +63,6 @@ export default async function getUser(message: Message, tgUser?: User): Promise<
     isUserModified = true;
 
     Logger.debug(`[GetUser]: User (${user.id}) username changed (@${user.username} > @${person.username})`);
-  };
-
-  // !deprecated Sync user participate chats ids
-  if (!user.participateChatsIds.includes(chatId)) {
-    user.participateChatsIds.push(chatId);
-    user.markModified('participateChatsIds');
-    isUserModified = true;
-
-    Logger.debug(`[GetUser]: (deprecated) User (${user.id}) appeared in new chat (${chatId})`);
-  };
-
-  // Sync user participate at
-  if (!user.participate_at.includes(chatId)) {
-    user.participate_at.push(chatId);
-    user.markModified('participate_at');
-    isUserModified = true;
-
-    Logger.debug(`[GetUser]: User (${user.id}) appeared in new chat (${chatId})`);
   };
 
 

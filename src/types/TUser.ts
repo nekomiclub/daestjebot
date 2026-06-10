@@ -13,12 +13,6 @@ export type TUser = {
   /** User public name */
   name: string | null
 
-  /** @deprecated User chats in */
-  participateChatsIds: number[]
-
-  /** User chats */
-  participate_at: number[]
-
   /** @deprecated Rights */
   rights: USER_RIGHTS[]
 

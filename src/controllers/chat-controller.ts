@@ -5,6 +5,7 @@ import { CommandsList, ICommandProps } from '~/types/types';
 import PingCommand from '~/commands/Ping';
 import Logger from '~/services/LoggerService';
 import ChatHelpCommand from '~/commands/chat/ChatHelp';
+import PingEveryoneCommand from '~/commands/chat/PingEveryone';
 
 
 
@@ -25,23 +26,10 @@ export default async function ChatController(message: Message) {
 
 
 
-    // if (text.match('/kek')) {
-    //   const participants = await client.invoke(new Api.channels.GetParticipants({
-    //     channel: chatId,
-    //     filter: new Api.ChannelParticipantsRecent(),
-    //     offset: 0,
-    //     limit: 200
-    //   }));
-
-    //   // @ts-ignore
-    //   console.log(participants.users.map(el => el.id.value.toString()));
-    // }
-
-
-
     if (text.match(CommandsList.PING)) return await PingCommand(command);
     if (text.match(CommandsList.HELP)) return await ChatHelpCommand(command);
+    if (text.match(CommandsList.PING_EVERYONE)) return await PingEveryoneCommand(command);
   } catch (e) {
-    Logger.error(`[Срфе]: An error occured at the chat`, e);
+    Logger.error(`[Chat]: An error occured at the chat`, e);
   }
 }

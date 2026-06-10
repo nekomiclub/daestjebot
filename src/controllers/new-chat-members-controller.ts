@@ -5,7 +5,6 @@ import Logger from '~/services/LoggerService';
 import { ICommandProps } from '~/types/types';
 import { messageDTO } from '~/utils/DTOs';
 import getChat from '~/utils/get-chat';
-import getUser from '~/utils/get-user';
 
 
 
@@ -15,6 +14,7 @@ export default async function NewChatMembersController(message: Message) {
     const { chat, chatId, from, text } = messageDTO(message);
 
     const command: ICommandProps = { message, user: null };
+    const tgChat = await getChat(message);
 
 
 
@@ -24,10 +24,9 @@ export default async function NewChatMembersController(message: Message) {
 
       // Handle daestje bot appear
       if (member.is_bot && member.id === conf.botId) {
-        const chat = await getChat(message);
-        chat.is_active = true;
+        tgChat.is_active = true;
 
-        await chat.save();
+        await tgChat.save();
 
         Logger.debug(`[Chat]: Bot has been appeared in the new chat [chatId:${chatId}]`);
 
@@ -44,15 +43,12 @@ export default async function NewChatMembersController(message: Message) {
 
 
       // Handle user appear
-      const user = await getUser(message, member);
-      if (!user) continue;
+      tgChat.participants.push(member.id);
+      tgChat.markModified('participants');
 
-      if (!user.participate_at.includes(chatId)) user.participate_at.push(chatId);
-      user.markModified('participate_at');
+      await tgChat.save();
 
-      await user.save();
-
-      Logger.debug(`[Chat]: New user has been appeared in the chat [id:${user.id};chatId:${chatId}]`);
+      Logger.debug(`[Chat]: New user has been appeared in the chat [id:${member.id};chatId:${chatId}]`);
     }
   } catch (e) {
     Logger.error(`[Chat]: An error occured at the chat [new_chat_members]`, e);

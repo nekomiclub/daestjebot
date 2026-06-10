@@ -22,6 +22,8 @@ export default async function PMController(message: Message) {
     const user = await getUser(message);
     const command: ICommandProps = { message, user };
 
+
+
     if (text.match(CommandsList.PING)) return await PingCommand(command);
     if (text.match(CommandsList.HELP)) return await PMHelpCommand(command);
     if (text.match(CommandsList.MY_BIRTHDAY)) return await MyBirthdayCommand(command);

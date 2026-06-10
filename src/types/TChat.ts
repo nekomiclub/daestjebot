@@ -4,4 +4,7 @@ export type TChat = {
 
   /** Whether is bot managing current group */
   is_active: boolean
+
+  /** Chat participant ids */
+  participants: number[]
 }

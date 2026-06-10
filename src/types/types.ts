@@ -18,6 +18,7 @@ export const CommandsList = {
   HELP: /^\/help/gi,
   MY_BIRTHDAY: /^\/my_birthday/gi,
   SET_MY_BIRTHDAY: /^\/set_birthday\s/gi,
+  PING_EVERYONE: /^\/all/gi,
 };
 
 
