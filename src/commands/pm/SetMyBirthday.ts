@@ -7,6 +7,8 @@ import { callbackType, daysBetween, getUserBirthday, getUTC, wordDeclination } f
 
 /** Set user's birthday */
 export default async function SetMyBirthday({ message, user }: ICommandProps) {
+  if (!user) return;
+
   const { chat, chatId, from, text } = messageDTO(message);
 
   const { birthdayTimeout, canChangeBirthday } = getUserBirthday(user);

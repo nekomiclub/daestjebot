@@ -24,5 +24,5 @@ export const CommandsList = {
 
 export interface ICommandProps {
   message: Message
-  user: HydratedDocument<TUser>
+  user: HydratedDocument<TUser> | null
 }

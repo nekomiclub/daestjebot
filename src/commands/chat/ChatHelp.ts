@@ -4,8 +4,8 @@ import { ICommandProps } from '~/types/types';
 
 
 
-/** Send group help */
-export default async function GroupHelpCommand({ message }: ICommandProps) {
+/** Send chat help */
+export default async function ChatHelpCommand({ message }: ICommandProps) {
   const { chat, chatId } = messageDTO(message);
 
 
@@ -17,8 +17,8 @@ export default async function GroupHelpCommand({ message }: ICommandProps) {
 
 /ping - 🏓 pong!
 /birthdays - Редагувати сповіщення про дні народження учасників групи (👮)
-/all (@all, @everyone) - Згадати всіх учасників групи (всі/👮)
-/pings - Редагувати доступ до @all (👮)
+/all - Згадати всіх учасників групи (всі/👮)
+/pings - Редагувати доступ до /all (👮)
 
 👮 - Команда доступна лише адміністраторам групи
 

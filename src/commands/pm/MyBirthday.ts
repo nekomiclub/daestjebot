@@ -11,6 +11,8 @@ const SUGGEST_DATE_CHANGE = `\n\n✒️ Ти можеш встановити н�
 
 /** Get user's birthday */
 export default async function MyBirthdayCommand({ message, user }: ICommandProps) {
+  if (!user) return;
+
   const { chat, chatId } = messageDTO(message);
 
   const { canChangeBirthday } = getUserBirthday(user);

@@ -4,12 +4,12 @@ import { messageDTO } from '~/utils/DTOs';
 import { CommandsList, ICommandProps } from '~/types/types';
 import PingCommand from '~/commands/Ping';
 import Logger from '~/services/LoggerService';
-import GroupHelpCommand from '~/commands/group/GroupHelp';
+import ChatHelpCommand from '~/commands/chat/ChatHelp';
 
 
 
 /** Groups controller */
-export default async function GroupController(message: Message) {
+export default async function ChatController(message: Message) {
   try {
     const { chat, chatId, from, text } = messageDTO(message);
 
@@ -40,8 +40,8 @@ export default async function GroupController(message: Message) {
 
 
     if (text.match(CommandsList.PING)) return await PingCommand(command);
-    if (text.match(CommandsList.HELP)) return await GroupHelpCommand(command);
+    if (text.match(CommandsList.HELP)) return await ChatHelpCommand(command);
   } catch (e) {
-    Logger.error(`[Group]: An error occured at group chat`, e);
+    Logger.error(`[Срфе]: An error occured at the chat`, e);
   }
 }

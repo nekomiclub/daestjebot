@@ -27,6 +27,6 @@ export default async function PMController(message: Message) {
     if (text.match(CommandsList.MY_BIRTHDAY)) return await MyBirthdayCommand(command);
     if (text.match(CommandsList.SET_MY_BIRTHDAY)) return await SetMyBirthday(command);
   } catch (e) {
-    Logger.error(`[PM]: An error occured at private chat`, e);
+    Logger.error(`[PM]: An error occured at the private chat`, e);
   }
 }

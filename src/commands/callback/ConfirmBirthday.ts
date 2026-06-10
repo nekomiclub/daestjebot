@@ -8,6 +8,8 @@ import { daysBetween, getUserBirthday, getUTC, wordDeclination } from '~/utils/u
 
 /** Confirm user birthday set */
 export default async function ConfirmBirthdayCallback({ message, user }: ICommandProps, data: CallbackType) {
+  if (!user) return;
+
   const { chat, chatId, from } = messageDTO(message);
 
   const { birthdayTimeout, canChangeBirthday } = getUserBirthday(user);

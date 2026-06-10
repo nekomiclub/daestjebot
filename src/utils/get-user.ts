@@ -1,10 +1,18 @@
 import { HydratedDocument } from 'mongoose';
 import TUser from '~/types/TUser';
 import { UserModel } from '~/models/UserModel';
-import { Message } from 'node-telegram-bot-api';
+import { Message, User } from 'node-telegram-bot-api';
 import { messageDTO } from '~/utils/DTOs';
 import Logger from '~/services/LoggerService';
 import { joinString } from './utils';
+
+
+
+type TPerson = {
+  id: number
+  first_name: string | undefined
+  username: string | undefined
+}
 
 
 
@@ -13,11 +21,13 @@ import { joinString } from './utils';
  * 
  * Update fields like name, username and participate in on invokation
  */
-export default async function getUser(message: Message): Promise<HydratedDocument<TUser>> {
+export default async function getUser(message: Message, tgUser?: User): Promise<HydratedDocument<TUser> | null> {
   const { chat, chatId, from } = messageDTO(message);
 
-  const person = chat.type === 'private' ? chat : from;
-  if (!person) throw new Error('500 - User person is not formed');
+  const person = getPerson(message, tgUser);
+  if (!person) return null;
+
+
 
   let user = await UserModel.findOne({ id: person.id });
   let isUserModified = false;
@@ -81,4 +91,42 @@ export default async function getUser(message: Message): Promise<HydratedDocumen
   if (isUserModified) await user.save();
 
   return user;
+}
+
+
+
+function getPerson(message: Message, tgUser?: User): TPerson | null {
+  const { chat, from } = messageDTO(message);
+
+
+
+  //! Drop bots
+  if (from?.is_bot) return null;
+
+
+
+  // Retrieve person data from telegram user
+  if (tgUser) {
+    return tgUser as TPerson;
+  }
+
+  // Retrieve person data from private chat
+  if (chat.type === 'private') {
+    return {
+      id: chat.id,
+      first_name: chat.first_name,
+      username: chat.username
+    } satisfies TPerson;
+  }
+
+  // Retrieve person data from from
+  if (from) {
+    return {
+      id: from.id,
+      first_name: from.first_name,
+      username: from.username
+    } satisfies TPerson;
+  }
+
+  return null;
 }
