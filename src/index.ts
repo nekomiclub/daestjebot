@@ -1,11 +1,10 @@
 import mongoose from 'mongoose';
-import conf, { bot, IsDevelopment, IsProduction } from './conf';
+import conf, { bot, client, IsDevelopment, IsProduction } from './conf';
 import env from './utils/env';
 import Logger from './services/LoggerService';
 import { getUTC } from './utils/utils';
 import Controller from './controllers/_index';
 import BirthdayNotifyService from './services/BirthdayNotifyService';
-import { MigrateDB } from './utils/migrate-db';
 
 
 
@@ -16,14 +15,12 @@ async function runtime() {
 
     // === Connect telegram client
     try {
-      // await client.start({ botAuthToken: env('TELEGRAM_BOT_TOKEN') });
+      await client.start({ botAuthToken: env('TELEGRAM_BOT_TOKEN') });
     } catch (e) {
       Logger.error(`[TelegramClient]: An error occured while connecting to the telegram`, e);
 
       await bot.sendMessage(conf.superadminId, `💥 Telegram client connection errored. See logs to retrieve more details.\n\n🗒️: ${(e as any)?.message}`);
     }
-
-    if (IsProduction) await MigrateDB();
 
     new BirthdayNotifyService().startCRON();
 

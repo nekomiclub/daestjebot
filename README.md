@@ -1,18 +1,15 @@
 # daestje bot
 
+Do good things better 🌿
+
 ## Setup
-Create local ```.env``` file using example ```.env.exmaple```
+1. Create local ```.env``` file using example ```.env.exmaple```
+2. Initialize husky by running ```npx husky```
+3. Run app by ```npm i && npm run dev```
 
-## Commands PM
-- Change birthday (superadmin) /bd @{} {DATE}
+## Contributing
+I appreciate your contributions, but it unlikely will be pushed into the app. Feel free to fork or copy
 
-## Commands Group
-- Grant perm (superadmin) /grant {...PERMS} (must be reply to user's message)
-- Remove perm (superadmin) /revoke {...PERMS} (must be reply to user's message)
-- Ping everyone @all (can_ping)
-- Ping students @st (can_ping)
-- Ping curators @cr (can_ping)
+---
 
-## Perms
-- can_ping - can ping everyone
-- bd_nt3 - three days notify about someone birthday
+Licensed under MIT
