@@ -56,6 +56,9 @@ async function runtime() {
     bot.on('callback_query', query => {
       if (!query.message) return;
 
+      // Reassign query message from
+      query.message.from = query.from;
+
       return CallbackController(query.message, query.data as CallbackType | undefined);
     });
 
@@ -63,8 +66,6 @@ async function runtime() {
 
     // === Handle appear in chats
     bot.on('new_chat_members', NewChatMembersController);
-
-
 
     // === Handle left from chats
     bot.on('left_chat_member', LeftChatMemberController);

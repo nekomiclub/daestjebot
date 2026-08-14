@@ -16,7 +16,10 @@ export default async function getChat(message: Message): Promise<HydratedDocumen
       id: message.chat.id,
       title: message.chat.title ?? 'untitled',
       is_active: false,
-      participants: []
+      participants: [],
+      variables: {
+        birthdays_notify: false
+      }
     };
 
     chat = new ChatModel(payload);

@@ -1,6 +1,6 @@
 import { bot } from '~/conf';
 import { messageDTO } from '~/utils/DTOs';
-import { CommandsList, ICommandProps } from '~/types/types';
+import { PMCommandsList, ICommandProps } from '~/types/types';
 import { callbackType, daysBetween, getUserBirthday, getUTC, wordDeclination } from '~/utils/utils';
 
 
@@ -23,7 +23,7 @@ export default async function SetMyBirthday({ message, user }: ICommandProps) {
   }
 
   // Parse date
-  const parsedDate = parseDate(text.replace(CommandsList.SET_MY_BIRTHDAY, '') ?? '');
+  const parsedDate = parseDate(text.replace(PMCommandsList.SET_MY_BIRTHDAY, '') ?? '');
   if (!parsedDate) return bot.sendMessage(chatId, `❌ Неправильна дата або її формат (приклад: 06.06.2026)`);
 
   // Set new date

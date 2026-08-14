@@ -43,12 +43,14 @@ export default async function NewChatMembersController(message: Message) {
 
 
       // Handle user appear
-      tgChat.participants.push(member.id);
-      tgChat.markModified('participants');
+      if (!tgChat.participants.includes(member.id)) {
+        tgChat.participants.push(member.id);
+        tgChat.markModified('participants');
 
-      await tgChat.save();
+        await tgChat.save();
 
-      Logger.debug(`[Chat]: New user has been appeared in the chat [id:${member.id};chatId:${chatId}]`);
+        Logger.debug(`[Chat]: New user has been appeared in the chat [id:${member.id};chatId:${chatId}]`);
+      }
     }
   } catch (e) {
     Logger.error(`[Chat]: An error occured at the chat [new_chat_members]`, e);

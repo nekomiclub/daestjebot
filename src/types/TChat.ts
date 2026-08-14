@@ -7,4 +7,9 @@ export type TChat = {
 
   /** Chat participant ids */
   participants: number[]
+
+  variables: {
+    /** Whether is to notify participants on their birthday in current group */
+    birthdays_notify: boolean
+  }
 }

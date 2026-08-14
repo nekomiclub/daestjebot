@@ -179,3 +179,12 @@ export function BirthdayNotifyKeyboard(isNotify: boolean): InlineKeyboardButton[
     callback_data: isNotify ? callbackType('birthday_notify_decline') : callbackType('birthday_notify_agree')
   }];
 }
+
+
+
+export function GroupBirthdayNotificationKeyboard(enabled: boolean): InlineKeyboardButton[] {
+  return [{
+    text: enabled ? '❌ Вимкнути' : '✅ Увімкнути',
+    callback_data: enabled ? callbackType('group_disable_birthday_notifications') : callbackType('group_enable_birthday_notifications')
+  }];
+}

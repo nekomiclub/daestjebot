@@ -22,8 +22,6 @@ type TPerson = {
  * Update fields like name, username and participate in on invokation
  */
 export default async function getUser(message: Message, tgUser?: User): Promise<HydratedDocument<TUser> | null> {
-  const { chat, chatId, from } = messageDTO(message);
-
   const person = getPerson(message, tgUser);
   if (!person) return null;
 

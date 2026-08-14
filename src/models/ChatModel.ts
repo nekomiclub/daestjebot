@@ -7,5 +7,6 @@ export const ChatModel = mongoose.model<TChat>('chat', new Schema({
   id: Number,
   title: String,
   is_active: Boolean,
-  participants: Array
+  participants: Array,
+  variables: Object
 }));

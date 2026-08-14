@@ -16,7 +16,7 @@ export default async function BirthdayNotifyAgreeCallback({ message, user }: ICo
 
 
 
-  await bot.editMessageReplyMarkup({
+  return await bot.editMessageReplyMarkup({
     inline_keyboard: [
       BirthdayNotifyKeyboard(isNotify)
     ]
