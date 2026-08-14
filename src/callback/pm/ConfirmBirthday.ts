@@ -29,8 +29,9 @@ export default async function ConfirmBirthday({ message, user }: ICommandProps, 
 
   const date = getUTC(Number(data.replace(PMCallbackList.CONFIRM_BIRTHDAY, '')));
 
-  hydratedUser.birthday_at = date.ISO;
-  hydratedUser.birthday_changed_at = getUTC().ISO;
+  hydratedUser.birthday.at = date.ISO;
+  hydratedUser.birthday.changed_at = getUTC().ISO;
+  hydratedUser.markModified('birthday');
 
   await hydratedUser.save();
 

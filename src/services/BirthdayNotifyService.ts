@@ -1,10 +1,3 @@
-// import { HydratedDocument } from 'mongoose';
-// import { UserModel } from '~/models/UserModel';
-// import TUser, { USER_RIGHTS } from '~/types/TUser';
-// import { bot, conf } from '~/conf';
-// import Logger from './LoggerService';
-// import { getUTC, mentionUser, randomBetween } from '~/utils/utils';
-
 import { HydratedDocument } from 'mongoose';
 import ms from 'ms';
 import { ChatModel } from '~/models/ChatModel';
@@ -46,13 +39,13 @@ export default class BirthdayNotifyService {
 
   /** Poll users birthdays */
   async poll() {
-    const users = await UserModel.find({ birthday_at: { $ne: undefined } });
+    const users = await UserModel.find({ 'birthday.at': { $ne: undefined } });
 
     for (const key in users) {
       const user = users[key];
 
-      if (isBirthday(user.birthday_at!) && user.birthday_notified_year !== getUTC().year) await this.notifyChats(user);
-      else if (isBirthdayInDays(user.birthday_at!, 3) && user.birthday_warned_year !== getUTC().year) await this.warnAboutBirthday(user);
+      if (isBirthday(user.birthday.at!) && user.birthday.notified_year !== getUTC().year) await this.notifyChats(user);
+      else if (isBirthdayInDays(user.birthday.at!, 3) && user.birthday.warned_year !== getUTC().year) await this.warnAboutBirthday(user);
     }
   }
 
@@ -62,8 +55,8 @@ export default class BirthdayNotifyService {
   async notifyChats(user: HydratedDocument<TUser>) {
     const groups = await ChatModel.find({ participants: { $in: [user.id] }, 'variables.birthdays_notify': true });
 
-    user.birthday_notified_year = getUTC().year;
-    user.markModified('birthday_notified_year');
+    user.birthday.notified_year = getUTC().year;
+    user.markModified('birthday');
 
     await user.save();
 
@@ -97,8 +90,8 @@ export default class BirthdayNotifyService {
   async warnAboutBirthday(user: HydratedDocument<TUser>) {
     const recipients = await this._getRecipients(user);
 
-    user.birthday_warned_year = getUTC().year;
-    user.markModified('birthday_warned_year');
+    user.birthday.warned_year = getUTC().year;
+    user.markModified('birthday');
 
     await user.save();
 
@@ -111,7 +104,7 @@ export default class BirthdayNotifyService {
         await sleep(500);
 
 
-        await bot.sendMessage(recipient.id, `🎂 Нагадую, у <a href="tg://user?id=${user.id}">@${escapeHtml(user.username ?? user.name ?? `{Ім'я не вказано}`)}</a> скоро буде день народження (${getUTC(user.birthday_at!).fulldate}), бажаю удачі!\n\n<i>Ти отримав це сповіщення тому що увімкнув отримання сповіщення про день народження знайомих у налаштуваннях. Редагувати - /birthday_notify</i>`, {
+        await bot.sendMessage(recipient.id, `🎂 Нагадую, у <a href="tg://user?id=${user.id}">@${escapeHtml(user.username ?? user.name ?? `{Ім'я не вказано}`)}</a> скоро буде день народження (${getUTC(user.birthday.at!).fulldate}), бажаю удачі!\n\n<i>Ти отримав це сповіщення тому що увімкнув отримання сповіщення про день народження знайомих у налаштуваннях. Редагувати - /birthday_notify</i>`, {
           parse_mode: 'HTML'
         });
       } catch (e) {
@@ -184,98 +177,3 @@ function isBirthdayInDays(isoDate: string, days: number): boolean {
 
   return diffDays === days;
 }
-
-
-
-// class BirthdayNotifyServ {
-//   usersNotified: number[] = [];
-//   usersNotifiedThreeDays: number[] = [];
-
-
-
-//   /** Start cron task */
-//   startCRON() {
-//     this.poll();
-
-//     // Ping every hour
-//     setInterval(async () => {
-//       this.poll();
-//     }, 3600000);
-//   }
-
-//   // Poll users birthdays
-//   async poll() {
-//     try {
-//       const now = getUTC();
-
-//       const users = await UserModel.find({ birthday: { $ne: undefined } });
-
-//       for (const key in users) {
-//         try {
-//           const user = users[key];
-
-//           const birthdayDate = getUTC(user.birthday);
-//           const birthdayDateNow = new Date(user.birthday!).setFullYear(getUTC().year);
-//           const threeDaysBirthdayOffset = new Date(user.birthday! - (60000 * 60 * 24 * 3)).setFullYear(getUTC().year);
-
-//           // notify main chat
-//           if (birthdayDate.month === now.month && birthdayDate.date === now.date && !this.usersNotified.includes(user.id)) {
-//             this.usersNotified.push(user.id);
-
-//             this.notifyChat(user, conf.mainChatId);
-//           };
-
-//           if (now.timestamp > threeDaysBirthdayOffset && now.timestamp < birthdayDateNow && !this.usersNotifiedThreeDays.includes(user.id)) {
-//             this.usersNotifiedThreeDays.push(user.id);
-
-//             this.notifyThreeDays(user);
-//           }
-//         } catch (e) {
-//           Logger.error(`[BirthdayNotifyServ]: Poll map users error`, e);
-//         }
-//       }
-//     } catch (e) {
-//       Logger.error(`[BirthdayNotifyServ]: Poll error`, e);
-//     }
-//   }
-
-//   /** Notify users chat */
-//   async notifyChat(user: HydratedDocument<TUser>, chatId: number) {
-//     try {
-//       if (user.participateChatsIds.includes(chatId)) {
-//         const celebrateMsg = await bot.sendPhoto(chatId, `https://cataas.com/cat?ts=${getUTC().timestamp}`, {
-//           caption: `З днем народження ${mentionUser(user)}! 🥳🎂🥂\n${BirthdayMessages[randomBetween(0, BirthdayMessages.length - 1)]}\n\nДавайте вип'єм за ту дату, Коли мама дала тату. 🍻`,
-//           parse_mode: 'Markdown'
-//         });
-
-//         await bot.pinChatMessage(chatId, celebrateMsg.message_id);
-
-//         Logger.info(`[BirthdayNotifyServ]: Celebrating ${user.username ?? user.name} birthday!`);
-//       } else {
-//         Logger.warn(`[BirthdayNotifyServ]: User (${user.id}) is not participate in required chat (#${chatId})`);
-//       }
-//     } catch (e) {
-//       Logger.error(`[BirthdayNotifyServ]: Chats notify error`, e);
-//     }
-//   }
-
-//   /** Notify chosen users about soon someone birthday */
-//   async notifyThreeDays(user: HydratedDocument<TUser>) {
-//     try {
-//       const notifyPoll = await UserModel.find({ rights: { $in: [USER_RIGHTS.BIRTHDAY_NOTIFY_3DAYS] } });
-
-//       for (const key in notifyPoll) {
-//         const notify = notifyPoll[key];
-
-//         await bot.sendMessage(notify.id, `Сап, the chosen one 👋\n\n🎂 Нагадую, у ${mentionUser(user)} скоро буде день народження (${getUTC(user.birthday).fulldate}), бажаю удачі!`, { parse_mode: 'Markdown' });
-//       }
-//     } catch (e) {
-//       Logger.error(`[BirthdayNotifyServ]: Three days notify error occured`, e);
-//     }
-//   }
-// }
-
-
-
-// const BirthdayNotifyService = new BirthdayNotifyServ();
-// export default BirthdayNotifyService;

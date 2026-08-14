@@ -8,8 +8,8 @@ import { callbackType } from '~/utils/utils';
 export default async function ToggleBirthdayNotify({ message, user }: ICommandProps, enabled: boolean) {
   if (!user) return;
 
-  user.recieve_birthday_notifications = enabled;
-  user.markModified('recieve_birthday_notifications');
+  user.variables.recieve_birthday_notifications = enabled;
+  user.markModified('variables');
 
   await user.save();
 

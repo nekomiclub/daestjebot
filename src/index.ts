@@ -5,6 +5,7 @@ import Logger from './services/LoggerService';
 import { getUTC } from './utils/utils';
 import Controller from './controllers/_index';
 import BirthdayNotifyService from './services/BirthdayNotifyService';
+import { MigrateDB } from './utils/migrate-db';
 
 
 
@@ -21,6 +22,8 @@ async function runtime() {
 
       await bot.sendMessage(conf.superadminId, `💥 Telegram client connection errored. See logs to retrieve more details.\n\n🗒️: ${(e as any)?.message}`);
     }
+
+    if (IsProduction) await MigrateDB();
 
     new BirthdayNotifyService().startCRON();
 

@@ -19,10 +19,10 @@ export default async function MyBirthdayCommand({ message, user }: ICommandProps
 
 
 
-  if (user.birthday_at) {
+  if (user.birthday.at) {
     // Send user's birthday if it is specified
     const today = getUTC();
-    const birthdayDate = getUTC(user.birthday_at);
+    const birthdayDate = getUTC(user.birthday.at);
     const within = daysBetween(`${today.str.date}.${today.str.month}`, `${birthdayDate.str.date}.${birthdayDate.str.month}`) ?? 0;
 
     return await bot.sendMessage(chatId, joinString([`🍰 Твій день народження буде через ${within} ${wordDeclination(within, ['день', 'дні', 'днів'])} (${birthdayDate.fulldate})`, canChangeBirthday && SUGGEST_DATE_CHANGE]));

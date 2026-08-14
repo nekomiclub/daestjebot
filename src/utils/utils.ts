@@ -146,10 +146,10 @@ export function joinString(subs: Array<string | null | undefined | number | fals
 
 /** Get user's birthday props */
 export function getUserBirthday(user: TUser) {
-  const birthdayTimeout = user.birthday_changed_at ? getUTC(user.birthday_changed_at).timestamp + conf.variables.changeBirthdayTimeout : 0;
+  const birthdayTimeout = user.birthday.changed_at ? getUTC(user.birthday.changed_at).timestamp + conf.variables.changeBirthdayTimeout : 0;
   const canChangeBirthday = !birthdayTimeout ? true : getUTC().timestamp > getUTC(birthdayTimeout).timestamp;
 
-  return { birthdayTimeout, canChangeBirthday, date: user.birthday_changed_at };
+  return { birthdayTimeout, canChangeBirthday, date: user.birthday.changed_at };
 }
 
 

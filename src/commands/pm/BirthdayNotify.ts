@@ -11,14 +11,12 @@ export default async function BirthdayNotifyCommand({ message, user }: ICommandP
 
   const { chat, chatId, from, text } = messageDTO(message);
 
-  const whetherToNotify = Boolean(user.recieve_birthday_notifications);
-
 
 
   await bot.sendMessage(chatId, `🍰 Отримувати сповіщення за 3 дні до дня народження когось, з ким ти знаходишся в одній групі?`, {
     reply_markup: {
       inline_keyboard: [
-        ToggleBirthdayNotifyKeyboard(whetherToNotify)
+        ToggleBirthdayNotifyKeyboard(user.variables.recieve_birthday_notifications)
       ]
     }
   });
