@@ -4,7 +4,7 @@ import { messageDTO } from '~/utils/DTOs';
 import { PMCommandsList, ICommandProps } from '~/types/types';
 import Logger from '~/services/LoggerService';
 import Command from '~/commands/pm/_index';
-import PingCommand from '~/commands/Ping';
+import PingPongCommand from '~/commands/PingPong';
 
 
 
@@ -22,7 +22,7 @@ export default async function PMController(message: Message) {
 
 
 
-    if (text.match(PMCommandsList.PING)) return await PingCommand(command);
+    if (text.match(PMCommandsList.PING)) return await PingPongCommand(command);
 
     if (text.match(PMCommandsList.HELP)) return await Command.PMHelpCommand(command);
     if (text.match(PMCommandsList.MY_BIRTHDAY)) return await Command.MyBirthdayCommand(command);

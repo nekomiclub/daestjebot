@@ -1,7 +1,7 @@
+import { ToggleBirthdayNotifyKeyboard } from '~/callback/pm/ToggleBirthdayNotify';
 import { bot } from '~/conf';
 import { ICommandProps } from '~/types/types';
 import { messageDTO } from '~/utils/DTOs';
-import { BirthdayNotifyKeyboard } from '~/utils/utils';
 
 
 
@@ -11,14 +11,14 @@ export default async function BirthdayNotifyCommand({ message, user }: ICommandP
 
   const { chat, chatId, from, text } = messageDTO(message);
 
-  const isNotify = Boolean(user.recieve_birthday_notifications);
+  const whetherToNotify = Boolean(user.recieve_birthday_notifications);
 
 
 
   await bot.sendMessage(chatId, `🍰 Отримувати сповіщення за 3 дні до дня народження когось, з ким ти знаходишся в одній групі?`, {
     reply_markup: {
       inline_keyboard: [
-        BirthdayNotifyKeyboard(isNotify)
+        ToggleBirthdayNotifyKeyboard(whetherToNotify)
       ]
     }
   });

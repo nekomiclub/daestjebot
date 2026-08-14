@@ -2,9 +2,9 @@ import { Message } from 'node-telegram-bot-api';
 import getUser from '~/utils/get-user';
 import { messageDTO } from '~/utils/DTOs';
 import { ICommandProps, GroupCommandsList } from '~/types/types';
-import PingCommand from '~/commands/Ping';
+import PingPongCommand from '~/commands/PingPong';
 import Logger from '~/services/LoggerService';
-import Command from '~/commands/chat/_index';
+import Command from '~/commands/group/_index';
 
 
 
@@ -25,7 +25,7 @@ export default async function ChatController(message: Message) {
 
 
 
-    if (text.match(GroupCommandsList.PING)) return await PingCommand(command);
+    if (text.match(GroupCommandsList.PING)) return await PingPongCommand(command);
 
     if (text.match(GroupCommandsList.HELP)) return await Command.ChatHelpCommand(command);
     if (text.match(GroupCommandsList.PING_EVERYONE)) return await Command.PingEveryoneCommand(command);

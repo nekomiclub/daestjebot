@@ -1,5 +1,5 @@
 import { Message, User } from 'node-telegram-bot-api';
-import ChatHelpCommand from '~/commands/chat/ChatHelp';
+import ChatHelpCommand from '~/commands/group/ChatHelp';
 import conf from '~/conf';
 import Logger from '~/services/LoggerService';
 import { ICommandProps } from '~/types/types';

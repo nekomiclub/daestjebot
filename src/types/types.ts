@@ -4,22 +4,23 @@ import TUser from './TUser';
 
 
 
-export type CallbackType =
-  | 'confirm_birthday' // After that should be ";{UTC timestamp}"
-  | 'birthday_notify_agree' // Agree pm notifications about birthdays
-  | 'birthday_notify_decline' // Decline pm notifications about birthdays
-  | 'group_enable_birthday_notifications' // Enable group participant birthday notification 
-  | 'group_disable_birthday_notifications' // Disable group participant birthday notification 
+export interface ICommandProps {
+  message: Message
+  user: HydratedDocument<TUser> | null
+}
 
 
 
-export const CallbackList: Record<Uppercase<CallbackType>, RegExp> = {
+export const PMCallbackList = {
+  /** After that should be ";{UTC timestamp}" */
   CONFIRM_BIRTHDAY: /confirm_birthday;/gi,
-  BIRTHDAY_NOTIFY_AGREE: /birthday_notify_agree/gi,
-  BIRTHDAY_NOTIFY_DECLINE: /birthday_notify_decline/gi,
-  GROUP_ENABLE_BIRTHDAY_NOTIFICATIONS: /group_enable_birthday_notifications/gi,
-  GROUP_DISABLE_BIRTHDAY_NOTIFICATIONS: /group_disable_birthday_notifications/gi,
-};
+
+  /** Agree notifications about birthdays */
+  ENABLE_BIRTHDAY_NOTIFY: /enable_birthday_notify/gi,
+
+  /** Decline notifications about birthdays */
+  DISABLE_BIRTHDAY_NOTIFY: /disable_birthday_notify/gi,
+} as const;
 
 export const PMCommandsList = {
   PING: /^\/ping/gi,
@@ -27,7 +28,19 @@ export const PMCommandsList = {
   MY_BIRTHDAY: /^\/my_birthday/gi,
   SET_MY_BIRTHDAY: /^\/set_birthday\s/gi,
   BIRTHDAY_NOTIFY: /^\/birthday_notify/gi,
-};
+} as const;
+
+export type PMCallbackType = Lowercase<keyof typeof PMCallbackList>
+
+
+
+export const GroupCallbackList = {
+  /** Enable participant birthday notification  */
+  ENABLE_BIRTHDAY_NOTIFICATIONS: /group_enable_birthday_notifications/gi,
+
+  /** Disable participant birthday notification  */
+  DISABLE_BIRTHDAY_NOTIFICATIONS: /group_disable_birthday_notifications/gi,
+} as const;
 
 export const GroupCommandsList = {
   PING: /^\/ping/gi,
@@ -37,9 +50,4 @@ export const GroupCommandsList = {
   PINGS: /^\/pings/gi,
 };
 
-
-
-export interface ICommandProps {
-  message: Message
-  user: HydratedDocument<TUser> | null
-}
+export type GroupCallbackType = Lowercase<keyof typeof GroupCallbackList>

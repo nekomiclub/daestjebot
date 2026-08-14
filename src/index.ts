@@ -3,7 +3,7 @@ import { bot, DevelopmentMode, ProductionMode } from './conf';
 import env from './utils/env';
 import Logger from './services/LoggerService';
 import { getUTC } from './utils/utils';
-import { CallbackType } from './types/types';
+import { PMCallbackType } from './types/types';
 import Controller from './controllers/_index';
 
 
@@ -55,7 +55,7 @@ async function runtime() {
       // Reassign query message from
       query.message.from = query.from;
 
-      return Controller.CallbackController(query.message, query.data as CallbackType | undefined);
+      return Controller.CallbackController(query.message, query.data as PMCallbackType | undefined);
     });
 
 

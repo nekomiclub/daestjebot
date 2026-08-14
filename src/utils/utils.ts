@@ -1,8 +1,7 @@
-import { InlineKeyboardButton } from 'node-telegram-bot-api';
 import z from 'zod';
 import conf from '~/conf';
 import TUser from '~/types/TUser';
-import { CallbackType } from '~/types/types';
+import { GroupCallbackType, PMCallbackType } from '~/types/types';
 
 
 
@@ -153,7 +152,7 @@ export function getUserBirthday(user: TUser) {
 
 
 /** Wrapper for CallbackType string */
-export const callbackType = (value: CallbackType): CallbackType => value;
+export const callbackType = <T extends PMCallbackType | GroupCallbackType>(value: T): T => value;
 
 
 
@@ -170,22 +169,4 @@ export function wordDeclination(number: number, words_arr: string[]) {
     return words_arr[(number % 100 > 4 && number % 100 < 20) ? 2 : options[(number % 10 < 5) ? number % 10 : 5]];
   }
   return words_arr[1];
-}
-
-
-
-export function BirthdayNotifyKeyboard(isNotify: boolean): InlineKeyboardButton[] {
-  return [{
-    text: isNotify ? '❌ Ні' : '✅ Так',
-    callback_data: isNotify ? callbackType('birthday_notify_decline') : callbackType('birthday_notify_agree')
-  }];
-}
-
-
-
-export function GroupBirthdayNotificationKeyboard(enabled: boolean): InlineKeyboardButton[] {
-  return [{
-    text: enabled ? '❌ Вимкнути' : '✅ Увімкнути',
-    callback_data: enabled ? callbackType('group_disable_birthday_notifications') : callbackType('group_enable_birthday_notifications')
-  }];
 }

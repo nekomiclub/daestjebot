@@ -1,13 +1,13 @@
 import { bot } from '~/conf';
 import { messageDTO } from '~/utils/DTOs';
 import { UserModel } from '~/models/UserModel';
-import { CallbackList, CallbackType, ICommandProps } from '~/types/types';
+import { PMCallbackList, PMCallbackType, ICommandProps } from '~/types/types';
 import { daysBetween, getUserBirthday, getUTC, wordDeclination } from '~/utils/utils';
 
 
 
 /** Confirm user birthday set */
-export default async function ConfirmBirthdayCallback({ message, user }: ICommandProps, data: CallbackType) {
+export default async function ConfirmBirthday({ message, user }: ICommandProps, data: PMCallbackType) {
   if (!user) return;
 
   const { chat, chatId, from } = messageDTO(message);
@@ -17,17 +17,17 @@ export default async function ConfirmBirthdayCallback({ message, user }: IComman
   //! Reject if user cannot change his birthday date
   if (!canChangeBirthday) {
     const today = getUTC();
-    const birthdayChangeDate = getUTC(birthdayTimeout);
-    const within = daysBetween(`${today.str.date}.${today.str.month}`, `${birthdayChangeDate.str.date}.${birthdayChangeDate.str.month}`) ?? 0;
+    const birthdayChangedAt = getUTC(birthdayTimeout);
+    const updateCooldown = daysBetween(`${today.str.date}.${today.str.month}`, `${birthdayChangedAt.str.date}.${birthdayChangedAt.str.month}`) ?? 0;
 
-    return await bot.sendMessage(chatId, `❌ Ти нещодавно вже змінював дату свого народження. \n\n⌚ В наступний раз це можна зробити через ${within} ${wordDeclination(within, ['день', 'дні', 'днів'])} (${birthdayChangeDate.fulldate})`);
+    return await bot.sendMessage(chatId, `❌ Ти нещодавно вже змінював дату свого народження. \n\n⌚ В наступний раз це можна зробити через ${updateCooldown} ${wordDeclination(updateCooldown, ['день', 'дні', 'днів'])} (${birthdayChangedAt.fulldate})`);
   }
 
   // Set new date
   const hydratedUser = await UserModel.findOne({ id: chat.id });
   if (!hydratedUser) return;
 
-  const date = getUTC(Number(data.replace(CallbackList.CONFIRM_BIRTHDAY, '')));
+  const date = getUTC(Number(data.replace(PMCallbackList.CONFIRM_BIRTHDAY, '')));
 
   hydratedUser.birthday_at = date.ISO;
   hydratedUser.birthday_changed_at = getUTC().ISO;
