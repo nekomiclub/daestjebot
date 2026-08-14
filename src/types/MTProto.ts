@@ -1,4 +1,4 @@
-export type TInteger = {
+export type IntegerType = {
   value: bigint;
 };
 
@@ -10,7 +10,7 @@ export type TParticipantProfilePhoto = {
   flags: number;
   hasVideo: boolean;
   personal: boolean;
-  photoId: TInteger;
+  photoId: IntegerType;
   strippedThumb: string | null;
   dcId: number;
 };
@@ -61,8 +61,8 @@ export type TParticipantUser = {
   botBusiness: boolean;
   botHasMainApp: boolean;
 
-  id: TInteger;
-  accessHash: TInteger;
+  id: IntegerType;
+  accessHash: IntegerType;
 
   firstName: string | null;
   lastName: string | null;

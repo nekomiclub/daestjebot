@@ -1,8 +1,8 @@
 import { bot } from '~/conf';
 import { ICommandProps } from '~/types/types';
 import { messageDTO } from '~/utils/DTOs';
-import getChat from '~/utils/get-chat';
-import { getParticipants } from '~/utils/MTProto';
+import getGroup from '~/utils/get-group';
+import { getGroupParticipants } from '~/utils/MTProto';
 import { randomBetween } from '~/utils/utils';
 
 
@@ -18,8 +18,8 @@ const UnnamedEmojis = ['😀', '😂', '😍', '🥳', '😎', '🤔', '😭', '
 export default async function PingEveryoneCommand({ message }: ICommandProps) {
   const { chat, chatId, from, text } = messageDTO(message);
 
-  const tgChat = await getChat(message);
-  const participants = (await getParticipants(chatId)).filter(el => !el.bot);
+  const tgChat = await getGroup(message);
+  const participants = (await getGroupParticipants(chatId)).filter(el => !el.bot);
   const replyId = message.reply_to_message?.message_id;
 
   // Update chat participants

@@ -3,11 +3,8 @@ import getUser from '~/utils/get-user';
 import { messageDTO } from '~/utils/DTOs';
 import { PMCommandsList, ICommandProps } from '~/types/types';
 import Logger from '~/services/LoggerService';
-import PMHelpCommand from '~/commands/pm/PMHelp';
+import Command from '~/commands/pm/_index';
 import PingCommand from '~/commands/Ping';
-import MyBirthdayCommand from '~/commands/pm/MyBirthday';
-import SetMyBirthday from '~/commands/pm/SetMyBirthday';
-import BirthdayNotifyCommand from '~/commands/pm/BirthdayNotify';
 
 
 
@@ -26,10 +23,11 @@ export default async function PMController(message: Message) {
 
 
     if (text.match(PMCommandsList.PING)) return await PingCommand(command);
-    if (text.match(PMCommandsList.HELP)) return await PMHelpCommand(command);
-    if (text.match(PMCommandsList.MY_BIRTHDAY)) return await MyBirthdayCommand(command);
-    if (text.match(PMCommandsList.SET_MY_BIRTHDAY)) return await SetMyBirthday(command);
-    if (text.match(PMCommandsList.BIRTHDAY_NOTIFY)) return await BirthdayNotifyCommand(command);
+
+    if (text.match(PMCommandsList.HELP)) return await Command.PMHelpCommand(command);
+    if (text.match(PMCommandsList.MY_BIRTHDAY)) return await Command.MyBirthdayCommand(command);
+    if (text.match(PMCommandsList.SET_MY_BIRTHDAY)) return await Command.SetMyBirthday(command);
+    if (text.match(PMCommandsList.BIRTHDAY_NOTIFY)) return await Command.BirthdayNotifyCommand(command);
   } catch (e) {
     Logger.error(`[PM]: An error occured at the private chat`, e);
   }

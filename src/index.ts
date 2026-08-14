@@ -3,12 +3,8 @@ import { bot, DevelopmentMode, ProductionMode } from './conf';
 import env from './utils/env';
 import Logger from './services/LoggerService';
 import { getUTC } from './utils/utils';
-import PMController from './controllers/pm-controller';
-import ChatController from './controllers/chat-controller';
-import CallbackController from './controllers/callback-controller';
 import { CallbackType } from './types/types';
-import NewChatMembersController from './controllers/new-chat-members-controller';
-import LeftChatMemberController from './controllers/left-chat-member-controller';
+import Controller from './controllers/_index';
 
 
 
@@ -42,8 +38,8 @@ async function runtime() {
 
     // === Handle messages
     bot.on('message', message => {
-      if (message.chat.type === 'group' || message.chat.type === 'supergroup') return ChatController(message);
-      if (message.chat.type === 'private') return PMController(message);
+      if (message.chat.type === 'group' || message.chat.type === 'supergroup') return Controller.ChatController(message);
+      if (message.chat.type === 'private') return Controller.PMController(message);
 
       return bot.sendPhoto(message.chat.id, `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoHWLFJuyEnP3g8pASP6OKlyaE9ZENmqX9gQ&s`, {
         caption: '😶‍🌫️ Бот не підтримує такий тип чатів'
@@ -59,16 +55,16 @@ async function runtime() {
       // Reassign query message from
       query.message.from = query.from;
 
-      return CallbackController(query.message, query.data as CallbackType | undefined);
+      return Controller.CallbackController(query.message, query.data as CallbackType | undefined);
     });
 
 
 
     // === Handle appear in chats
-    bot.on('new_chat_members', NewChatMembersController);
+    bot.on('new_chat_members', Controller.NewChatMembersController);
 
     // === Handle left from chats
-    bot.on('left_chat_member', LeftChatMemberController);
+    bot.on('left_chat_member', Controller.LeftChatMemberController);
   } catch (e) {
     Logger.error(`[System/Init]: FATAL ERROR OCCURED. MESSAGE: `, e);
 

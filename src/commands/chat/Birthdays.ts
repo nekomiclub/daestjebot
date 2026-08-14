@@ -1,7 +1,7 @@
 import { bot } from '~/conf';
 import { messageDTO } from '~/utils/DTOs';
 import { ICommandProps } from '~/types/types';
-import getChat from '~/utils/get-chat';
+import getGroup from '~/utils/get-group';
 import { GroupBirthdayNotificationKeyboard } from '~/utils/utils';
 
 
@@ -13,7 +13,7 @@ export default async function BirthdaysCommand({ message }: ICommandProps) {
   const member = await bot.getChatMember(chatId, from!.id);
   if (!['administrator', 'creator'].includes(member.status)) return;
 
-  const group = await getChat(message);
+  const group = await getGroup(message);
 
 
 

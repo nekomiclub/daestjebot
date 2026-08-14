@@ -12,6 +12,7 @@ type TPerson = {
   id: number
   first_name: string | undefined
   username: string | undefined
+  is_bot?: boolean
 }
 
 
@@ -19,11 +20,24 @@ type TPerson = {
 /** 
  * Get user's object from the database
  * 
- * Update fields like name, username and participate in on invokation
+ * If user is not exist inside the database, will create new document
+ * Updates user bio on call
+ * 
+ * @param tgUser Implicitly provide telegram user
  */
 export default async function getUser(message: Message, tgUser?: User): Promise<HydratedDocument<TUser> | null> {
   const person = getPerson(message, tgUser);
-  if (!person) return null;
+  if (!person) {
+    Logger.warn(`[GetUser]: Cannot retrieve person details`);
+
+    return null;
+  }
+
+  if (person.is_bot) {
+    Logger.warn(`[GetUser]: Bot person has been provided`);
+
+    return null;
+  }
 
 
 
@@ -74,15 +88,14 @@ export default async function getUser(message: Message, tgUser?: User): Promise<
 
 
 
+/** Get person information from the message or implicit tg user */
 function getPerson(message: Message, tgUser?: User): TPerson | null {
   const { chat, from } = messageDTO(message);
 
 
 
   // Retrieve person data from telegram user
-  if (tgUser) {
-    return tgUser as TPerson;
-  }
+  if (tgUser) return tgUser as TPerson;
 
   // Retrieve person data from private chat
   if (chat.type === 'private') {

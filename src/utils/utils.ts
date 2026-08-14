@@ -152,6 +152,7 @@ export function getUserBirthday(user: TUser) {
 
 
 
+/** Wrapper for CallbackType string */
 export const callbackType = (value: CallbackType): CallbackType => value;
 
 

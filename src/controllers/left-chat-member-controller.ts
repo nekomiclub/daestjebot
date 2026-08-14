@@ -2,7 +2,7 @@ import { Message } from 'node-telegram-bot-api';
 import conf from '~/conf';
 import Logger from '~/services/LoggerService';
 import { messageDTO } from '~/utils/DTOs';
-import getChat from '~/utils/get-chat';
+import getGroup from '~/utils/get-group';
 
 
 
@@ -14,7 +14,7 @@ export default async function LeftChatMemberController(message: Message) {
     const member = message.left_chat_member;
     if (!member) return;
 
-    const tgChat = await getChat(message);
+    const tgChat = await getGroup(message);
 
 
     // Handle bot kick

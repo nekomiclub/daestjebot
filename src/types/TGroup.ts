@@ -1,4 +1,4 @@
-export type TChat = {
+export type TGroup = {
   id: number
   title: string
 

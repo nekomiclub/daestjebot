@@ -4,9 +4,7 @@ import { messageDTO } from '~/utils/DTOs';
 import { ICommandProps, GroupCommandsList } from '~/types/types';
 import PingCommand from '~/commands/Ping';
 import Logger from '~/services/LoggerService';
-import ChatHelpCommand from '~/commands/chat/ChatHelp';
-import PingEveryoneCommand from '~/commands/chat/PingEveryone';
-import BirthdaysCommand from '~/commands/chat/Birthdays';
+import Command from '~/commands/chat/_index';
 
 
 
@@ -28,9 +26,10 @@ export default async function ChatController(message: Message) {
 
 
     if (text.match(GroupCommandsList.PING)) return await PingCommand(command);
-    if (text.match(GroupCommandsList.HELP)) return await ChatHelpCommand(command);
-    if (text.match(GroupCommandsList.PING_EVERYONE)) return await PingEveryoneCommand(command);
-    if (text.match(GroupCommandsList.BIRTHDAYS)) return await BirthdaysCommand(command);
+
+    if (text.match(GroupCommandsList.HELP)) return await Command.ChatHelpCommand(command);
+    if (text.match(GroupCommandsList.PING_EVERYONE)) return await Command.PingEveryoneCommand(command);
+    if (text.match(GroupCommandsList.BIRTHDAYS)) return await Command.BirthdaysCommand(command);
   } catch (e) {
     Logger.error(`[Chat]: An error occured at the chat`, e);
   }

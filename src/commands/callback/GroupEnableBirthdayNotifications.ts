@@ -1,6 +1,6 @@
 import { bot } from '~/conf';
 import { ICommandProps } from '~/types/types';
-import getChat from '~/utils/get-chat';
+import getGroup from '~/utils/get-group';
 import { GroupBirthdayNotificationKeyboard } from '~/utils/utils';
 
 
@@ -13,7 +13,7 @@ export default async function GroupEnableBirthdayNotificationsCallback({ message
   console.log(member.status, ['administrator', 'creator'].includes(member.status));
   if (!['administrator', 'creator'].includes(member.status)) return;
 
-  const group = await getChat(message);
+  const group = await getGroup(message);
 
   group.variables.birthdays_notify = true;
   group.markModified('variables');

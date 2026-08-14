@@ -4,7 +4,7 @@ import conf from '~/conf';
 import Logger from '~/services/LoggerService';
 import { ICommandProps } from '~/types/types';
 import { messageDTO } from '~/utils/DTOs';
-import getChat from '~/utils/get-chat';
+import getGroup from '~/utils/get-group';
 
 
 
@@ -14,7 +14,7 @@ export default async function NewChatMembersController(message: Message) {
     const { chat, chatId, from, text } = messageDTO(message);
 
     const command: ICommandProps = { message, user: null };
-    const tgChat = await getChat(message);
+    const tgChat = await getGroup(message);
 
 
 

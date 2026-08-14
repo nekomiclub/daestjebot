@@ -3,11 +3,7 @@ import getUser from '~/utils/get-user';
 import { messageDTO } from '~/utils/DTOs';
 import Logger from '~/services/LoggerService';
 import { CallbackList, CallbackType, ICommandProps } from '~/types/types';
-import ConfirmBirthdayCallback from '~/commands/callback/ConfirmBirthday';
-import BirthdayNotifyDeclineCallback from '~/commands/callback/BirthdayNotifyDecline';
-import BirthdayNotifyAgreeCallback from '~/commands/callback/BirthdayNotifyAgree';
-import GroupEnableBirthdayNotificationsCallback from '~/commands/callback/GroupEnableBirthdayNotifications';
-import GroupDisableBirthdayNotificationsCallback from '~/commands/callback/GroupDisableBirthdayNotifications';
+import Callback from '~/commands/callback/_index';
 
 
 
@@ -25,11 +21,11 @@ export default async function CallbackController(message: Message, data?: Callba
 
 
 
-    if (data.match(CallbackList.CONFIRM_BIRTHDAY)) return await ConfirmBirthdayCallback(command, data);
-    if (data.match(CallbackList.BIRTHDAY_NOTIFY_AGREE)) return await BirthdayNotifyAgreeCallback(command);
-    if (data.match(CallbackList.BIRTHDAY_NOTIFY_DECLINE)) return await BirthdayNotifyDeclineCallback(command);
-    if (data.match(CallbackList.GROUP_DISABLE_BIRTHDAY_NOTIFICATIONS)) return await GroupDisableBirthdayNotificationsCallback(command);
-    if (data.match(CallbackList.GROUP_ENABLE_BIRTHDAY_NOTIFICATIONS)) return await GroupEnableBirthdayNotificationsCallback(command);
+    if (data.match(CallbackList.CONFIRM_BIRTHDAY)) return await Callback.ConfirmBirthdayCallback(command, data);
+    if (data.match(CallbackList.BIRTHDAY_NOTIFY_AGREE)) return await Callback.BirthdayNotifyAgreeCallback(command);
+    if (data.match(CallbackList.BIRTHDAY_NOTIFY_DECLINE)) return await Callback.BirthdayNotifyDeclineCallback(command);
+    if (data.match(CallbackList.GROUP_DISABLE_BIRTHDAY_NOTIFICATIONS)) return await Callback.GroupDisableBirthdayNotificationsCallback(command);
+    if (data.match(CallbackList.GROUP_ENABLE_BIRTHDAY_NOTIFICATIONS)) return await Callback.GroupEnableBirthdayNotificationsCallback(command);
   } catch (e) {
     Logger.error(`[PM]: An error occured at private chat`, e);
   }
