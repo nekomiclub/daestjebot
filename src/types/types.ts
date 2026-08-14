@@ -1,5 +1,5 @@
 import { HydratedDocument } from 'mongoose';
-import { Message } from 'node-telegram-bot-api';
+import { CallbackQuery, Message } from 'node-telegram-bot-api';
 import TUser from './TUser';
 
 
@@ -7,6 +7,8 @@ import TUser from './TUser';
 export interface ICommandProps {
   message: Message
   user: HydratedDocument<TUser> | null
+
+  query?: CallbackQuery
 }
 
 
@@ -36,10 +38,10 @@ export type PMCallbackType = Lowercase<keyof typeof PMCallbackList>
 
 export const GroupCallbackList = {
   /** Enable participant birthday notification  */
-  ENABLE_BIRTHDAY_NOTIFICATIONS: /group_enable_birthday_notifications/gi,
+  ENABLE_BIRTHDAY_NOTIFICATIONS: /enable_birthday_notifications/gi,
 
   /** Disable participant birthday notification  */
-  DISABLE_BIRTHDAY_NOTIFICATIONS: /group_disable_birthday_notifications/gi,
+  DISABLE_BIRTHDAY_NOTIFICATIONS: /disable_birthday_notifications/gi,
 } as const;
 
 export const GroupCommandsList = {

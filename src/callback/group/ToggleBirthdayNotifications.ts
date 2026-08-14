@@ -1,16 +1,16 @@
 import { InlineKeyboardButton } from 'node-telegram-bot-api';
 import { bot } from '~/conf';
 import { ICommandProps } from '~/types/types';
+import { CHECK_isNotAdmin } from '~/utils/check-access';
 import getGroup from '~/utils/get-group';
 import { callbackType } from '~/utils/utils';
 
 
 
-export default async function GroupToggleBirthdayNotifications({ message, user }: ICommandProps, enabled: boolean) {
-  if (!user) return;
+export default async function GroupToggleBirthdayNotifications({ message, user, query }: ICommandProps, enabled: boolean) {
+  if (!user || !query) return;
 
-  const member = await bot.getChatMember(message.chat.id, user.id);
-  if (!['administrator', 'creator'].includes(member.status)) return;
+  if (await CHECK_isNotAdmin(message, query.id)) return;
 
   const group = await getGroup(message);
 

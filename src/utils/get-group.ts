@@ -22,7 +22,8 @@ export default async function getGroup(message: Message): Promise<HydratedDocume
       is_active: false,
       participants: [],
       variables: {
-        birthdays_notify: false
+        birthdays_notify: false,
+        allow_public_invoke_everyone: false
       }
     };
 

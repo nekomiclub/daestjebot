@@ -14,16 +14,16 @@ export default async function LeftChatMemberController(message: Message) {
     const member = message.left_chat_member;
     if (!member) return;
 
-    const tgChat = await getGroup(message);
+    const group = await getGroup(message);
 
 
     // Handle bot kick
     if (member.is_bot && member.id === conf.botId) {
-      tgChat.is_active = false;
+      group.is_active = false;
 
-      await tgChat.save();
+      await group.save();
 
-      Logger.debug(`[Chat]: Bot has been kicked from the chat [chatId:${chatId}]`);
+      Logger.debug(`[Chat]: Bot has been kicked from the chat [chatId=${chatId}]`);
 
       return;
     }
@@ -36,12 +36,12 @@ export default async function LeftChatMemberController(message: Message) {
 
 
     // Handle user kick
-    tgChat.participants = tgChat.participants.filter(el => el !== member.id);
-    tgChat.markModified('participants');
+    group.participants = group.participants.filter(el => el !== member.id);
+    group.markModified('participants');
 
-    await tgChat.save();
+    await group.save();
 
-    Logger.debug(`[Chat]: User has been kicked from the chat [id:${member.id};chatId:${chatId}]`);
+    Logger.debug(`[Chat]: User has been kicked from the chat [id=${member.id};chatId=${chatId}]`);
   } catch (e) {
     Logger.error(`[Chat]: An error occured at the chat [left_chat_member]`, e);
   }

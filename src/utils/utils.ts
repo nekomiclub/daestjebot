@@ -128,12 +128,6 @@ export const zBoolean = z.preprocess((value) => {
 
 
 
-export function mentionUser(user: TUser) {
-  return `[${user.username ? `@${user.username}` : user.name}](tg://user?id=${user.id})`;
-}
-
-
-
 /** Join substring with null filtering */
 export function joinString(subs: Array<string | null | undefined | number | false>) {
   return subs.filter(el => Boolean(el)).join(' ');

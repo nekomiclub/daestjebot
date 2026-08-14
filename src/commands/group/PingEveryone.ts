@@ -1,5 +1,7 @@
+import { sleep } from 'telegram/Helpers';
 import { bot } from '~/conf';
 import { ICommandProps } from '~/types/types';
+import { CHECK_isNotAdmin } from '~/utils/check-access';
 import { messageDTO } from '~/utils/DTOs';
 import getGroup from '~/utils/get-group';
 import { getGroupParticipants } from '~/utils/MTProto';
@@ -8,7 +10,7 @@ import { randomBetween } from '~/utils/utils';
 
 
 /** Max mentions per messages that will generate notification */
-const TELEGRAM_MAX_MENTIONS = 5;
+const MAX_MENTIONS_PER_MESSAGE = 5;
 
 const UnnamedEmojis = ['😀', '😂', '😍', '🥳', '😎', '🤔', '😭', '😴', '🤯', '😮‍💨', '👍', '🙏', '🔥', '🎉', '🌟'];
 
@@ -18,14 +20,18 @@ const UnnamedEmojis = ['😀', '😂', '😍', '🥳', '😎', '🤔', '😭', '
 export default async function PingEveryoneCommand({ message }: ICommandProps) {
   const { chat, chatId, from, text } = messageDTO(message);
 
-  const tgChat = await getGroup(message);
+  const group = await getGroup(message);
+
+  // Reject invokation if user is not admin and allow public invoke everyone is disabled
+  if (!group.variables.allow_public_invoke_everyone && await CHECK_isNotAdmin(message)) return;
+
   const participants = (await getGroupParticipants(chatId)).filter(el => !el.bot);
   const replyId = message.reply_to_message?.message_id;
 
   // Update chat participants
-  tgChat.participants = participants.map(el => Number(el.id.value.toString()));
+  group.participants = participants.map(el => Number(el.id.value.toString()));
 
-  await tgChat.save();
+  await group.save();
 
   // Construct messages
   const messages: string[][] = [];
@@ -35,9 +41,7 @@ export default async function PingEveryoneCommand({ message }: ICommandProps) {
     const name = member.username ? `@${member.username}` : member.firstName ?? UnnamedEmojis[randomBetween(0, UnnamedEmojis.length - 1)];
     const message = `[${name}](tg://user?id=${member.id})`;
 
-    console.log(message);
-
-    if (stack.length !== TELEGRAM_MAX_MENTIONS) {
+    if (stack.length !== MAX_MENTIONS_PER_MESSAGE) {
       // Append message to the stack
       stack.push(message);
     } else {
@@ -47,7 +51,7 @@ export default async function PingEveryoneCommand({ message }: ICommandProps) {
     }
   });
 
-  // Append not full stack
+  // Append partial stack
   if (stack.length !== 0) messages.push(stack);
 
 
@@ -55,6 +59,8 @@ export default async function PingEveryoneCommand({ message }: ICommandProps) {
   // Send messages
   for (const key in messages) {
     const message = messages[key];
+
+    await sleep(250);
 
     await bot.sendMessage(chatId, message.join(', '), {
       protect_content: true,

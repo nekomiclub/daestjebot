@@ -9,7 +9,7 @@ import Command from '~/commands/group/_index';
 
 
 /** Groups controller */
-export default async function ChatController(message: Message) {
+export default async function GroupController(message: Message) {
   try {
     const { chat, chatId, from, text } = messageDTO(message);
 

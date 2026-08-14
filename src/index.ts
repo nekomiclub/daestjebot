@@ -3,7 +3,6 @@ import { bot, DevelopmentMode, ProductionMode } from './conf';
 import env from './utils/env';
 import Logger from './services/LoggerService';
 import { getUTC } from './utils/utils';
-import { PMCallbackType } from './types/types';
 import Controller from './controllers/_index';
 
 
@@ -38,7 +37,7 @@ async function runtime() {
 
     // === Handle messages
     bot.on('message', message => {
-      if (message.chat.type === 'group' || message.chat.type === 'supergroup') return Controller.ChatController(message);
+      if (message.chat.type === 'group' || message.chat.type === 'supergroup') return Controller.GroupController(message);
       if (message.chat.type === 'private') return Controller.PMController(message);
 
       return bot.sendPhoto(message.chat.id, `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoHWLFJuyEnP3g8pASP6OKlyaE9ZENmqX9gQ&s`, {
@@ -50,12 +49,7 @@ async function runtime() {
 
     // === Handle callback queries 
     bot.on('callback_query', query => {
-      if (!query.message) return;
-
-      // Reassign query message from
-      query.message.from = query.from;
-
-      return Controller.CallbackController(query.message, query.data as PMCallbackType | undefined);
+      return Controller.CallbackController(query);
     });
 
 

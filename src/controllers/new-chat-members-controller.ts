@@ -28,7 +28,7 @@ export default async function NewChatMembersController(message: Message) {
 
         await tgChat.save();
 
-        Logger.debug(`[Chat]: Bot has been appeared in the new chat [chatId:${chatId}]`);
+        Logger.debug(`[Chat]: Bot has been appeared in the new chat [chatId=${chatId}]`);
 
         await ChatHelpCommand(command);
 
@@ -49,7 +49,7 @@ export default async function NewChatMembersController(message: Message) {
 
         await tgChat.save();
 
-        Logger.debug(`[Chat]: New user has been appeared in the chat [id:${member.id};chatId:${chatId}]`);
+        Logger.debug(`[Chat]: New user has been appeared in the chat [id=${member.id};chatId=${chatId}]`);
       }
     }
   } catch (e) {

@@ -1,15 +1,24 @@
-import { Message } from 'node-telegram-bot-api';
+import { CallbackQuery } from 'node-telegram-bot-api';
 import getUser from '~/utils/get-user';
 import { messageDTO } from '~/utils/DTOs';
 import Logger from '~/services/LoggerService';
-import { PMCallbackList, PMCallbackType, ICommandProps, GroupCallbackList, GroupCallbackType } from '~/types/types';
+import { PMCallbackList, PMCallbackType, ICommandProps, GroupCallbackList } from '~/types/types';
 import PMCallback from '~/callback/pm/_index';
 import GroupCallback from '~/callback/group/_index';
 
 
 
 /** Callback controller */
-export default async function CallbackController(message: Message, callbackType?: PMCallbackType | GroupCallbackType) {
+export default async function CallbackController(query: CallbackQuery) {
+  const message = query.message;
+  if (!message) return Logger.warn(`[CallbackController]: No message retrieved from query`);
+
+  message.from = query.from;
+
+  const callbackType = query.data;
+
+
+
   try {
     const { chat, chatId, from } = messageDTO(message);
 
@@ -18,7 +27,7 @@ export default async function CallbackController(message: Message, callbackType?
 
     // Get user
     const user = await getUser(message);
-    const command: ICommandProps = { message, user };
+    const command: ICommandProps = { message, user, query };
 
 
 
