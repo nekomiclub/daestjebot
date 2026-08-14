@@ -1,11 +1,11 @@
 import { sleep } from 'telegram/Helpers';
-import { bot } from '~/conf';
+import conf, { bot } from '~/conf';
 import { ICommandProps } from '~/types/types';
 import { CHECK_isNotAdmin } from '~/utils/check-access';
 import { messageDTO } from '~/utils/DTOs';
 import getGroup from '~/utils/get-group';
 import { getGroupParticipants } from '~/utils/MTProto';
-import { randomBetween } from '~/utils/utils';
+import { getUTC, randomBetween } from '~/utils/utils';
 
 
 
@@ -25,11 +25,20 @@ export default async function PingEveryoneCommand({ message }: ICommandProps) {
   // Reject invokation if user is not admin and allow public invoke everyone is disabled
   if (!group.variables.allow_public_everyone && await CHECK_isNotAdmin(message)) return;
 
+  // Reject invokation if on cooldown
+  if (group.variables.everyone_invoked_at && getUTC().timestamp < getUTC(group.variables.everyone_invoked_at).timestamp + conf.variables.everyoneInvokeTimeout) return await bot.sendMessage(chatId, `⌚ Не так часто!`);
+
+  // Update everyone invoked at TS
+  group.variables.everyone_invoked_at = getUTC().ISO;
+
   const participants = (await getGroupParticipants(chatId)).filter(el => !el.bot);
   const replyId = message.reply_to_message?.message_id;
 
   // Update chat participants
   group.participants = participants.map(el => Number(el.id.value.toString()));
+
+  group.markModified('participants');
+  group.markModified('variables');
 
   await group.save();
 
@@ -62,7 +71,7 @@ export default async function PingEveryoneCommand({ message }: ICommandProps) {
 
     await sleep(250);
 
-    await bot.sendMessage(chatId, message.join(', '), {
+    await bot.sendMessage(chatId, `Треба глянуть групу "${group.title}" 🌞 ${message.join(', ')}`, {
       protect_content: true,
       parse_mode: 'Markdown',
       reply_to_message_id: replyId

@@ -6,11 +6,8 @@ import ms from 'ms';
 
 
 
-export const DevelopmentMode = env('NODE_ENV') === 'development';
-export const ProductionMode = env('NODE_ENV') === 'production';
-
-/** @deprecated */
-export const adminId = 1030829551;
+export const IsDevelopment = env('NODE_ENV') === 'development';
+export const IsProduction = env('NODE_ENV') === 'production';
 
 
 
@@ -28,14 +25,7 @@ export const client = new TelegramClient(new StringSession(), env('TELEGRAM_API_
 });
 
 export const conf = {
-  /** @deprecated */
-  superadminId: adminId,
-
-  /** @deprecated */
-  curatorsIds: [697514948, 1386161279, 531261619],
-
-  /** @deprecated */
-  mainChatId: ProductionMode ? -1003067202557 : -1002939508402,
+  superadminId: 1030829551,
 
   botId: Number(env('TELEGRAM_BOT_TOKEN').split(':')[0]),
 
@@ -45,6 +35,7 @@ export const conf = {
     },
 
     changeBirthdayTimeout: ms('0.5y'),
+    everyoneInvokeTimeout: ms('30s')
   },
 };
 

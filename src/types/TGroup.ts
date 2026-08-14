@@ -14,5 +14,8 @@ export type TGroup = {
 
     /** Whether to allow invoke ping everyone command by each member */
     allow_public_everyone: boolean
+
+    /** ISO timestamp when /all has been invoked */
+    everyone_invoked_at: string | null
   }
 }
