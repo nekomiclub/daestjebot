@@ -42,6 +42,9 @@ export default async function CallbackController(query: CallbackQuery) {
     // ========== GROUP
     if (callbackType.match(GroupCallbackList.ENABLE_BIRTHDAY_NOTIFICATIONS)) return await GroupCallback.ToggleBirthdayNotifications(command, true);
     if (callbackType.match(GroupCallbackList.DISABLE_BIRTHDAY_NOTIFICATIONS)) return await GroupCallback.ToggleBirthdayNotifications(command, false);
+
+    if (callbackType.match(GroupCallbackList.ENABLE_PUBLIC_EVERYONE)) return await GroupCallback.TogglePublicEveryone(command, true);
+    if (callbackType.match(GroupCallbackList.DISABLE_PUBLIC_EVERYONE)) return await GroupCallback.TogglePublicEveryone(command, false);
   } catch (e) {
     Logger.error(`[PM]: An error occured at private chat`, e);
   }

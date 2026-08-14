@@ -23,7 +23,7 @@ export default async function PingEveryoneCommand({ message }: ICommandProps) {
   const group = await getGroup(message);
 
   // Reject invokation if user is not admin and allow public invoke everyone is disabled
-  if (!group.variables.allow_public_invoke_everyone && await CHECK_isNotAdmin(message)) return;
+  if (!group.variables.allow_public_everyone && await CHECK_isNotAdmin(message)) return;
 
   const participants = (await getGroupParticipants(chatId)).filter(el => !el.bot);
   const replyId = message.reply_to_message?.message_id;

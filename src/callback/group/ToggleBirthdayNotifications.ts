@@ -7,7 +7,7 @@ import { callbackType } from '~/utils/utils';
 
 
 
-export default async function GroupToggleBirthdayNotifications({ message, user, query }: ICommandProps, enabled: boolean) {
+export default async function ToggleBirthdayNotifications({ message, user, query }: ICommandProps, enabled: boolean) {
   if (!user || !query) return;
 
   if (await CHECK_isNotAdmin(message, query.id)) return;
@@ -19,11 +19,15 @@ export default async function GroupToggleBirthdayNotifications({ message, user, 
 
   await group.save();
 
+  await bot.answerCallbackQuery(query.id, {
+    text: enabled ? `🍰 Сповіщення про дні народження учасників в цій групі увімкнено` : `❌ Сповіщення про дні народження учасників в цій групі вимкнено`
+  });
+
 
 
   return await bot.editMessageReplyMarkup({
     inline_keyboard: [
-      ToggleBirthdayNotificationsKeyboard(group.variables.birthdays_notify)
+      ToggleBirthdayNotificationsKeyboard(enabled)
     ]
   }, {
     chat_id: message.chat.id,

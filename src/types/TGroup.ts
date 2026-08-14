@@ -13,6 +13,6 @@ export type TGroup = {
     birthdays_notify: boolean
 
     /** Whether to allow invoke ping everyone command by each member */
-    allow_public_invoke_everyone: boolean
+    allow_public_everyone: boolean
   }
 }

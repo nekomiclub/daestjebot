@@ -30,6 +30,7 @@ export default async function GroupController(message: Message) {
     if (text.match(GroupCommandsList.HELP)) return await Command.ChatHelpCommand(command);
     if (text.match(GroupCommandsList.PING_EVERYONE)) return await Command.PingEveryoneCommand(command);
     if (text.match(GroupCommandsList.BIRTHDAYS)) return await Command.BirthdaysCommand(command);
+    if (text.match(GroupCommandsList.PINGS)) return await Command.Pings(command);
   } catch (e) {
     Logger.error(`[Chat]: An error occured at the chat`, e);
   }

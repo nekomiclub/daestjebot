@@ -13,6 +13,14 @@ export interface ICommandProps {
 
 
 
+export const PMCommandsList = {
+  PING: /^\/ping$/gi,
+  HELP: /^\/help$/gi,
+  MY_BIRTHDAY: /^\/my_birthday$/gi,
+  SET_MY_BIRTHDAY: /^\/set_birthday\s/gi,
+  BIRTHDAY_NOTIFY: /^\/birthday_notify$/gi,
+} as const;
+
 export const PMCallbackList = {
   /** After that should be ";{UTC timestamp}" */
   CONFIRM_BIRTHDAY: /confirm_birthday;/gi,
@@ -24,17 +32,17 @@ export const PMCallbackList = {
   DISABLE_BIRTHDAY_NOTIFY: /disable_birthday_notify/gi,
 } as const;
 
-export const PMCommandsList = {
-  PING: /^\/ping/gi,
-  HELP: /^\/help/gi,
-  MY_BIRTHDAY: /^\/my_birthday/gi,
-  SET_MY_BIRTHDAY: /^\/set_birthday\s/gi,
-  BIRTHDAY_NOTIFY: /^\/birthday_notify/gi,
-} as const;
-
 export type PMCallbackType = Lowercase<keyof typeof PMCallbackList>
 
 
+
+export const GroupCommandsList = {
+  PING: /^\/ping$/gi,
+  HELP: /^\/help$/gi,
+  PING_EVERYONE: /^\/all$/gi,
+  BIRTHDAYS: /^\/birthdays$/gi,
+  PINGS: /^\/pings$/gi,
+};
 
 export const GroupCallbackList = {
   /** Enable participant birthday notification  */
@@ -42,14 +50,12 @@ export const GroupCallbackList = {
 
   /** Disable participant birthday notification  */
   DISABLE_BIRTHDAY_NOTIFICATIONS: /disable_birthday_notifications/gi,
-} as const;
 
-export const GroupCommandsList = {
-  PING: /^\/ping/gi,
-  HELP: /^\/help/gi,
-  PING_EVERYONE: /^\/all/gi,
-  BIRTHDAYS: /^\/birthdays/gi,
-  PINGS: /^\/pings/gi,
-};
+  /** Enable participant birthday notification  */
+  ENABLE_PUBLIC_EVERYONE: /enable_public_everyone/gi,
+
+  /** Disable participant birthday notification  */
+  DISABLE_PUBLIC_EVERYONE: /disable_public_everyone/gi,
+} as const;
 
 export type GroupCallbackType = Lowercase<keyof typeof GroupCallbackList>
