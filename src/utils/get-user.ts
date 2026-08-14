@@ -54,6 +54,8 @@ export default async function getUser(message: Message, tgUser?: User): Promise<
       rights: [],
       recieve_birthday_notifications: false,
       birthday_at: null,
+      birthday_notified_year: null,
+      birthday_warned_year: null
     };
 
     user = new UserModel(payload);

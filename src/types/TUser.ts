@@ -30,6 +30,12 @@ export type TUser = {
   /** ISO timestamp of birthday changed date */
   birthday_changed_at: string | null
 
+  /** Year when user was previously notified */
+  birthday_notified_year: number | null
+
+  /** Year when user was previously warned */
+  birthday_warned_year: number | null
+
   /** Whether to recieve mutual contacts birthday notifications */
   recieve_birthday_notifications: boolean
 }

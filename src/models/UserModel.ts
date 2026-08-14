@@ -12,4 +12,6 @@ export const UserModel = mongoose.model<TUser>('user', new Schema({
   birthday_changed_at: String,
   birthday_at: String,
   recieve_birthday_notifications: Boolean,
+  birthday_notified_year: Number,
+  birthday_warned_year: Number,
 }));
