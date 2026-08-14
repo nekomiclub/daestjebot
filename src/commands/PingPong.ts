@@ -1,0 +1,12 @@
+import { bot } from '~/conf';
+import { messageDTO } from '~/utils/DTOs';
+import { ICommandProps } from '~/types/types';
+
+
+
+/** Ping/Pong command */
+export default async function PingPongCommand({ message }: ICommandProps) {
+  const { chat, chatId } = messageDTO(message);
+
+  await bot.sendMessage(chatId, `🏓 pong!`);
+}

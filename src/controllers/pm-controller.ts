@@ -1,30 +1,34 @@
 import { Message } from 'node-telegram-bot-api';
-import { Logger } from '../services/LoggerService';
-import getUser from '../handlers/get-user';
-import { messageDTO } from '../handlers/DTOs';
-import { CommandsList, ICommandProps } from '../types/types';
-import { config } from '../config';
-import changeBirthdayCommand from '../commands/change-birthday';
-import reconnectMongodb from '../commands/reconnect-mongodb';
+import getUser from '~/utils/get-user';
+import { messageDTO } from '~/utils/DTOs';
+import { PMCommandsList, ICommandProps } from '~/types/types';
+import Logger from '~/services/LoggerService';
+import Command from '~/commands/pm/_index';
+import PingPongCommand from '~/commands/PingPong';
 
 
 
-export default async function PMController(msg: Message) {
+/** PM controller */
+export default async function PMController(message: Message) {
   try {
-    const { chat, chatId, from, text } = messageDTO(msg);
+    const { chat, chatId, from, text } = messageDTO(message);
 
     // Drop undefined
     if (!from || !text) return;
 
     // Get user
-    const user = await getUser(msg);
-    const cp: ICommandProps = { msg, user };
+    const user = await getUser(message);
+    const command: ICommandProps = { message, user };
 
 
 
-    if (text.match(CommandsList.CHANGE_BIRTHDAY) && user.id === config.superadminId) await changeBirthdayCommand(cp);
-    if (text.match(CommandsList.RECONNECT_MONGODB) && user.id === config.superadminId) await reconnectMongodb();
+    if (text.match(PMCommandsList.PING)) return await PingPongCommand(command);
+
+    if (text.match(PMCommandsList.HELP)) return await Command.PMHelpCommand(command);
+    if (text.match(PMCommandsList.MY_BIRTHDAY)) return await Command.MyBirthdayCommand(command);
+    if (text.match(PMCommandsList.SET_MY_BIRTHDAY)) return await Command.SetMyBirthday(command);
+    if (text.match(PMCommandsList.BIRTHDAY_NOTIFY)) return await Command.BirthdayNotifyCommand(command);
   } catch (e) {
-    Logger.error(`[PM]: An error occured at private chat`, e);
+    Logger.error(`[PM]: An error occured at the private chat`, e);
   }
 }

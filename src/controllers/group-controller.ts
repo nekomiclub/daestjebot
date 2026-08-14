@@ -1,40 +1,37 @@
 import { Message } from 'node-telegram-bot-api';
-import { Logger } from '../services/LoggerService';
-import { USER_RIGHTS } from '../types/IUser';
-import { config } from '../config';
-import getUser from '../handlers/get-user';
-import grantPermCommand from '../commands/grant-perm';
-import { messageDTO } from '../handlers/DTOs';
-import revokePermCommand from '../commands/revoke-perm';
-import pingEveryoneCommand, { pingCurators, pingStudents } from '../commands/ping-everyone';
-import { CommandsList, ICommandProps } from '../types/types';
-import ping from '../commands/ping';
+import getUser from '~/utils/get-user';
+import { messageDTO } from '~/utils/DTOs';
+import { ICommandProps, GroupCommandsList } from '~/types/types';
+import PingPongCommand from '~/commands/PingPong';
+import Logger from '~/services/LoggerService';
+import Command from '~/commands/group/_index';
 
 
 
-export default async function GroupController(msg: Message) {
+/** Groups controller */
+export default async function GroupController(message: Message) {
   try {
-    const { chat, chatId, from, text } = messageDTO(msg);
-
-    // Drop bots
-    if (from?.is_bot) return;
+    const { chat, chatId, from, text } = messageDTO(message);
 
     // Drop undefined
     if (!from || !text) return;
 
+    // Drop bots
+    if (from.is_bot) return;
+
     // Get user
-    const user = await getUser(msg);
-    const cp: ICommandProps = { msg, user };
+    const user = await getUser(message);
+    const command: ICommandProps = { message, user };
 
 
 
-    if (text.match(CommandsList.GRANT_PERM) && user.id === config.superadminId) await grantPermCommand(cp);
-    if (text.match(CommandsList.REVOKE_PERM) && user.id === config.superadminId) await revokePermCommand(cp);
-    if (text.match(CommandsList.PING_EVERYONE) && user.rights.includes(USER_RIGHTS.CAN_PING)) await pingEveryoneCommand(cp);
-    if (text.match(CommandsList.PING_STUDENTS) && user.rights.includes(USER_RIGHTS.CAN_PING)) await pingStudents(cp);
-    if (text.match(CommandsList.PING_CURATORS) && user.rights.includes(USER_RIGHTS.CAN_PING)) await pingCurators(cp);
-    if (text.match(CommandsList.PING)) await ping(cp);
+    if (text.match(GroupCommandsList.PING)) return await PingPongCommand(command);
+
+    if (text.match(GroupCommandsList.HELP)) return await Command.ChatHelpCommand(command);
+    if (text.match(GroupCommandsList.PING_EVERYONE)) return await Command.PingEveryoneCommand(command);
+    if (text.match(GroupCommandsList.BIRTHDAYS)) return await Command.BirthdaysCommand(command);
+    if (text.match(GroupCommandsList.PINGS)) return await Command.Pings(command);
   } catch (e) {
-    Logger.error(`[Group]: An error occured at group chat`, e);
+    Logger.error(`[Chat]: An error occured at the chat`, e);
   }
 }
