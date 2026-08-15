@@ -5,6 +5,7 @@ import Logger from './services/LoggerService';
 import { getUTC } from './utils/utils';
 import Controller from './controllers/_index';
 import BirthdayNotifyService from './services/BirthdayNotifyService';
+import BotCommands from './utils/bot-commands';
 
 
 
@@ -22,7 +23,11 @@ async function runtime() {
       await bot.sendMessage(conf.superadminId, `💥 Telegram client connection errored. See logs to retrieve more details.\n\n🗒️: ${(e as any)?.message}`);
     }
 
+    // Start birthday notify service CRON
     new BirthdayNotifyService().startCRON();
+
+    // === Set hint commands 
+    BotCommands();
 
 
 
@@ -34,13 +39,6 @@ async function runtime() {
       Mode: ${IsProduction ? 'Production' : IsDevelopment ? 'Development' : 'UNKNOWN'}
       ----------------------------
         `);
-
-
-
-    // === Set hint commands for default chat type 
-    bot.setMyCommands([
-      { command: '/help', description: 'ℹ️ Інформація' }
-    ], { scope: { type: 'default' } });
 
 
 

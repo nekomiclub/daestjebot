@@ -37,11 +37,11 @@ export type PMCallbackType = Lowercase<keyof typeof PMCallbackList>
 
 
 export const GroupCommandsList = {
-  PING: /^\/ping$/gi,
-  HELP: /^\/help$/gi,
-  PING_EVERYONE: /^\/all$/gi,
-  BIRTHDAYS: /^\/birthdays$/gi,
-  PINGS: /^\/pings$/gi,
+  PING: /^\/ping?(@.+)$/gi,
+  HELP: /^\/help?(@.+)$/gi,
+  PING_EVERYONE: /^\/all?(@.+)$/gi,
+  BIRTHDAYS: /^\/birthdays?(@.+)$/gi,
+  PINGS: /^\/pings?(@.+)$/gi,
 };
 
 export const GroupCallbackList = {

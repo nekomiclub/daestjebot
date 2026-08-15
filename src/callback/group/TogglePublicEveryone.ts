@@ -1,6 +1,7 @@
-import { InlineKeyboardButton } from 'node-telegram-bot-api';
+import { BotCommand, InlineKeyboardButton } from 'node-telegram-bot-api';
 import { bot } from '~/conf';
 import { ICommandProps } from '~/types/types';
+import { GroupCommands, PingEveryone } from '~/utils/bot-commands';
 import { CHECK_isNotAdmin } from '~/utils/check-access';
 import getGroup from '~/utils/get-group';
 import { callbackType } from '~/utils/utils';
@@ -22,6 +23,14 @@ export default async function TogglePublicEveryone({ message, user, query }: ICo
   await bot.answerCallbackQuery(query.id, {
     text: enabled ? `✅ Використання команди /all дозволено для всіх учасників групи` : `👮 Використання команди /all заборонено для всіх учасників групи`
   });
+
+  const newCommands: BotCommand[] = [
+    ...GroupCommands,
+  ];
+
+  if (enabled) newCommands.push(PingEveryone);
+
+  await bot.setMyCommands(newCommands, { scope: { type: 'chat', chat_id: message.chat.id } });
 
 
 
