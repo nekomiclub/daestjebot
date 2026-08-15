@@ -1,7 +1,7 @@
 FROM node:25-alpine3.22
 
 WORKDIR /usr/src/app
-ENV ISDOCKER=true
+ENV IS_DOCKER=true
 
 # Install dependencies
 COPY package*.json ./

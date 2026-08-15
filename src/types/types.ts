@@ -16,6 +16,7 @@ export interface ICommandProps {
 export const PMCommandsList = {
   PING: /^\/ping$/gi,
   HELP: /^\/help$/gi,
+  START: /^\/start$/gi,
   MY_BIRTHDAY: /^\/my_birthday$/gi,
   SET_MY_BIRTHDAY: /^\/set_birthday\s/gi,
   BIRTHDAY_NOTIFY: /^\/birthday_notify$/gi,
