@@ -69,7 +69,7 @@ export default async function PingEveryoneCommand({ message }: ICommandProps) {
   for (const key in messages) {
     const message = messages[key];
 
-    await sleep(250);
+    await sleep(500);
 
     await bot.sendMessage(chatId, `Треба глянуть групу "${group.title}" 🌞 ${message.join(', ')}`, {
       protect_content: true,

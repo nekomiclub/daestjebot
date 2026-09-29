@@ -42,8 +42,26 @@ async function runtime() {
 
 
 
+    let pollingErrors = 0;
+
+    bot.on('polling_error', (error) => {
+      Logger.error(`[TelegramClien]: Polling error`, error);
+
+      pollingErrors++;
+
+      if (pollingErrors >= 10) {
+        Logger.warn(`[TelegramClien]: Too many polling errror, restarting container ...`, error);
+
+        process.exit(1);
+      }
+    });
+
+
+
     // === Handle messages
     bot.on('message', message => {
+      pollingErrors = 0;
+
       if (message.chat.type === 'group' || message.chat.type === 'supergroup') return Controller.GroupController(message);
       if (message.chat.type === 'private') return Controller.PMController(message);
 
@@ -80,10 +98,45 @@ runtime();
 
 
 
+let disconnectedAt: number | null = null;
+let restartTimer: NodeJS.Timeout | null = null;
+
+
+
 /** Connect to the mongodb */
 async function ConnectMongoDB() {
   mongoose.set('strictQuery', false);
   await mongoose.connect(`mongodb+srv://${env('MONGODB_USR')}:${env('MONGODB_PWD')}@${env('MONGODB_HOST')}/${env('MONGODB_DB')}`, {
     retryWrites: true,
+    serverSelectionTimeoutMS: 10_000
+  });
+
+  mongoose.connection.on('connected', () => {
+    Logger.info(`[MongoDB]: Connected successfully!`);
+
+    disconnectedAt = null;
+
+    if (restartTimer) {
+      clearTimeout(restartTimer);
+      restartTimer = null;
+    }
+  });
+
+  mongoose.connection.on('disconnected', () => {
+    Logger.warn(`[MongoDB]: Database disconnected`);
+
+    if (disconnectedAt) return;
+
+    disconnectedAt = Date.now();
+
+    restartTimer = setTimeout(() => {
+      Logger.error(`[MongoDB]: Database has been disconnected for 2 minutes, restarting ...`);
+
+      process.exit(1);
+    }, 2 * 60 * 1000);
+  });
+
+  mongoose.connection.on('error', (error) => {
+    Logger.error(`[MongoDB]: An error occured`, error);
   });
 }
